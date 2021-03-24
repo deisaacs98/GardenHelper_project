@@ -1,0 +1,3 @@
+graft gardenhelper/static
+graft gardenhelper/templates
+global-exclude *.pyc
