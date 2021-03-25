@@ -6,7 +6,7 @@ from types import SimpleNamespace
 class Plant:
     def __init__(self, _id, _date_planted, _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,
                  _soil_moisture):
-        self._id = _id
+        self.id = _id
         self.date_planted = _date_planted
         self.date_harvested = _date_harvested
         self.last_watering = _last_watering
