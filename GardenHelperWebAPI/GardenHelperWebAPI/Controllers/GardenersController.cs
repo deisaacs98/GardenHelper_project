@@ -10,144 +10,63 @@ using GardenHelperWebAPI.Models;
 
 namespace GardenHelperWebAPI.Controllers
 {
-    public class GardenersController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GardenersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
+        private ApplicationDbContext _context;
         public GardenersController(ApplicationDbContext context)
         {
             _context = context;
         }
-
-        // GET: Gardeners
-        public async Task<IActionResult> Index()
+        // GET api/movie
+        [HttpGet]
+        public IActionResult Get()
         {
-            return View(await _context.Gardener.ToListAsync());
+            // Retrieve all movies from db logic
+            var gardener = _context.Gardeners;
+            return Ok(gardener);
         }
 
-        // GET: Gardeners/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET api/movie/5
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var gardener = await _context.Gardener
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gardener == null)
-            {
-                return NotFound();
-            }
-
-            return View(gardener);
+            // Retrieve movie by id from db logic
+            // return Ok(movie);
+            var movie = _context.Gardeners.Where(m => m.Id == id);
+            return Ok(movie);
         }
 
-        // GET: Gardeners/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Gardeners/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST api/movie
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,MiddleInitial,LastName,Email,AddressLine1,AddressLine2,City,State,Zip,Phone,Lat,Lng")] Gardener gardener)
+        public IActionResult Post([FromBody] Gardener value)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(gardener);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(gardener);
+            // Create movie in db logic
+            _context.Gardeners.Add(value);
+            _context.SaveChanges();
+            return Ok();
         }
 
-        // GET: Gardeners/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // PUT api/movie
+        [HttpPut]
+        public IActionResult Put([FromBody] Gardener gardener)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var gardener = await _context.Gardener.FindAsync(id);
-            if (gardener == null)
-            {
-                return NotFound();
-            }
-            return View(gardener);
+            // Update movie in db logic
+            _context.Gardeners.Update(gardener);
+            _context.SaveChanges();
+            return Ok();
         }
 
-        // POST: Gardeners/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,MiddleInitial,LastName,Email,AddressLine1,AddressLine2,City,State,Zip,Phone,Lat,Lng")] Gardener gardener)
+        // DELETE api/movie/5
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            if (id != gardener.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(gardener);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GardenerExists(gardener.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(gardener);
-        }
-
-        // GET: Gardeners/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var gardener = await _context.Gardener
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gardener == null)
-            {
-                return NotFound();
-            }
-
-            return View(gardener);
-        }
-
-        // POST: Gardeners/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var gardener = await _context.Gardener.FindAsync(id);
-            _context.Gardener.Remove(gardener);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool GardenerExists(int id)
-        {
-            return _context.Gardener.Any(e => e.Id == id);
+            // Delete movie from db logic
+            var selectedGardener = _context.Gardeners.FirstOrDefault(m => m.Id == id);
+            _context.Gardeners.Remove(selectedGardener);
+            _context.SaveChanges();
+            return Ok();
         }
     }
 }

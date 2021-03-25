@@ -183,3 +183,8 @@ D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\bin\Debu
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\e_sqlite3.dll
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\e_sqlite3.dll
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\e_sqlite3.dll
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\Razor\Views\Gardeners\Create.cshtml.g.cs
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\Razor\Views\Gardeners\Delete.cshtml.g.cs
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\Razor\Views\Gardeners\Details.cshtml.g.cs
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\Razor\Views\Gardeners\Edit.cshtml.g.cs
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\Razor\Views\Gardeners\Index.cshtml.g.cs

@@ -13,6 +13,6 @@ namespace GardenHelperWebAPI.Data
             : base(options)
         {
         }
-        public DbSet<GardenHelperWebAPI.Models.Gardener> Gardener { get; set; }
+        public DbSet<GardenHelperWebAPI.Models.Gardener> Gardeners { get; set; }
     }
 }
