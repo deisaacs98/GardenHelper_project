@@ -3,7 +3,7 @@ import requests
 from types import SimpleNamespace
 
 
-class gardener:
+class Gardener:
     def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1,_address_line2, _city,
                  _state, _zip, _phone, _lat, _lng):
         self._id = _id
@@ -22,7 +22,7 @@ class gardener:
 
     @staticmethod
     def gardener_decoder(obj):
-        return gardener(obj['_id'], obj['_first_name'], obj['_middle_initial'], obj['_last_name'], obj['_email'],
+        return Gardener(obj['_id'], obj['_first_name'], obj['_middle_initial'], obj['_last_name'], obj['_email'],
                         obj['_address_line1'], obj['_address_line2'], obj['_city'],  obj['_state'],
                         obj['_zip'], obj['_phone'], obj['_lat'], obj['_lng'])
 
