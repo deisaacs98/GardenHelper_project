@@ -4,12 +4,12 @@ from types import SimpleNamespace
 
 
 class Growth:
-    def __init__(self, _id, days_to_harvest, _description, _sowing, _ph_maximum, _ph_minimum,
+    def __init__(self, _id, _days_to_harvest, _description, _sowing, _ph_maximum, _ph_minimum,
                  _light, _atmospheric_humidity, _grow_months, _bloom_months, _fruit_months, _row_spacing, _spread,
                  _minimum_precipitation, _maximum_precipitation, _minimum_temperature, _maximum_temperature,
                  _soil_humidity):
         self.id = _id
-        self.days_to_harvest = days_to_harvest
+        self.days_to_harvest = _days_to_harvest
         self.description = _description
         self.sowing = _sowing
         self.ph_maximum = _ph_maximum
@@ -28,8 +28,8 @@ class Growth:
         self.soil_humidity = _soil_humidity
 
     @staticmethod
-    def gardener_decoder(obj):
-        return Growth(obj['_id'], obj['days_to_harvest'],obj['_description'], obj['_sowing'],  obj['_ph_maximum'],
+    def growth_decoder(obj):
+        return Growth(obj['_id'], obj['_days_to_harvest'],obj['_description'], obj['_sowing'],  obj['_ph_maximum'],
                       obj['_ph_minimum'], obj['_light'], obj['_atmospheric_humidity'],  obj['_grow_months'],
                       obj['_bloom_months'], obj['_fruit_months'], obj['_row_spacing'], obj['_spread'],
                       obj['_minimum_precipitation'], obj['_maximum_precipitation'], obj['_minimum_temperature'],
