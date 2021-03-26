@@ -4,9 +4,14 @@ from types import SimpleNamespace
 
 
 class Plant:
-    def __init__(self, _id, _date_planted, _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,
-                 _soil_moisture):
+    def __init__(self, _id, _growth_id, _specifications_id, _images_id, _distribution_id, _date_planted,
+                 _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,_soil_moisture,
+                 _amount_harvested):
         self.id = _id
+        self.growth_id = _growth_id
+        self.specifications_id = _specifications_id
+        self.images_id = _images_id
+        self.distribution_id = _distribution_id
         self.date_planted = _date_planted
         self.date_harvested = _date_harvested
         self.last_watering = _last_watering
@@ -15,6 +20,7 @@ class Plant:
         self.soil_ph = _soil_ph
         self.light = _light
         self.soil_moisture = _soil_moisture
+        self.amount_harvested = _amount_harvested
 
     @staticmethod
     def plant_decoder(obj):

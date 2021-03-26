@@ -176,6 +176,37 @@ namespace GardenHelperWebAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Plant",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GrowthId = table.Column<int>(nullable: false),
+                    SpecificationsId = table.Column<int>(nullable: false),
+                    ImagesId = table.Column<int>(nullable: false),
+                    DistributionId = table.Column<int>(nullable: false),
+                    DatePlanted = table.Column<DateTime>(nullable: false),
+                    DateHarvested = table.Column<DateTime>(nullable: false),
+                    LastWatering = table.Column<DateTime>(nullable: false),
+                    HealthStatus = table.Column<string>(nullable: true),
+                    SoilPH = table.Column<double>(nullable: false),
+                    Light = table.Column<double>(nullable: false),
+                    SoilMoisture = table.Column<double>(nullable: false),
+                    AmountHarvested = table.Column<double>(nullable: false),
+                    GardenerId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plant", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Plant_Gardeners_GardenerId",
+                        column: x => x.GardenerId,
+                        principalTable: "Gardeners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -214,6 +245,11 @@ namespace GardenHelperWebAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Plant_GardenerId",
+                table: "Plant",
+                column: "GardenerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -234,13 +270,16 @@ namespace GardenHelperWebAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Gardeners");
+                name: "Plant");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Gardeners");
         }
     }
 }

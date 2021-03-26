@@ -20,6 +20,6 @@ namespace GardenHelperWebAPI.Models
         public int Phone { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
-
+        public IEnumerable<Plant> Garden { get; set; }
     }
 }

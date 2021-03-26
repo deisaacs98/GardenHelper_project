@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenHelperWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210325175449_Init")]
+    [Migration("20210326180045_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,59 @@ namespace GardenHelperWebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gardeners");
+                });
+
+            modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("AmountHarvested")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("DateHarvested")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DatePlanted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DistributionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GardenerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GrowthId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HealthStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ImagesId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastWatering")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Light")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SoilMoisture")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SoilPH")
+                        .HasColumnType("float");
+
+                    b.Property<int>("SpecificationsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GardenerId");
+
+                    b.ToTable("Plant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -267,6 +320,13 @@ namespace GardenHelperWebAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
+                {
+                    b.HasOne("GardenHelperWebAPI.Models.Gardener", null)
+                        .WithMany("Garden")
+                        .HasForeignKey("GardenerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
