@@ -19,7 +19,7 @@ class Gardener:
         self.Phone = _phone
         self.Lat = _lat
         self.Lng = _lng
-        self.Plants = _plants
+        self.Garden = _plants
 
     @staticmethod
     def gardener_decoder(obj):
