@@ -24,11 +24,11 @@ class Plant:
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-#response = requests.get('put REST API url here')
+response = requests.get('https://trefle.io/api/v1/plants/search?token=YOUR_TREFLE_TOKEN&q=coconut')
 
 #json_data_dict = json.loads(response)
 
-#gardeners = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
 
 
-###gardeners = gerdener.gardener_decoder(json_data_dict)
+###plants = plant.plant_decoder(json_data_dict)
