@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 
 class Gardener:
+
     def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1,_address_line2, _city,
                  _state, _zip, _phone, _lat, _lng, _plants):
         self.Id = _id
