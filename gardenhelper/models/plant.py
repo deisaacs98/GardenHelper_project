@@ -24,7 +24,7 @@ class Plant:
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-response = requests.get('https://trefle.io/api/v1/plants/search?token=YOUR_TREFLE_TOKEN&q=coconut')
+response = requests.get('https://trefle.io/api/v1/plants/search?token=YOUR_TREFLE_TOKEN&q={common_name}')
 
 #json_data_dict = json.loads(response)
 

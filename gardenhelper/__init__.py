@@ -17,7 +17,7 @@ def create_app():
 
     from . import gardener
     app.register_blueprint(gardener.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/', endpoint='search')
 
     from . import plants
     app.register_blueprint(plants.bp)
