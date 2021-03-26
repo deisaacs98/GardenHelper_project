@@ -36,4 +36,8 @@ class Gardener:
 #gardeners = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
 
 
-###gardeners = gerdener.gardener_decoder(json_data_dict)
+###gardeners = gardener.gardener_decoder(json_data_dict)
+response = requests.get('https://trefle.io/api/v1/plants/search?token=')
+
+#json_data_dict = json.loads(response)
+plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))

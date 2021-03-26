@@ -9,12 +9,13 @@ import sklearn as sklearn
 bp = Blueprint('plant', __name__)
 
 
-@bp.route('/search',methods=['GET','POST'])
+@bp.route('/search', methods=['GET', 'POST'])
 def search_name():
     if request.method == 'POST':
         common_name = request.form['common_name']
+
         error = None
-        plants = []
+        search_results = []
         if not common_name:
             error = 'You must enter a name'
         for plant in plants:
@@ -32,9 +33,9 @@ def search_name():
             for plant in plants:
                 if plant.common_name.upper() == common_name.upper():
                     common_name = plant.common_name
-                    plants.append(plant)
+                    search_results.append(plant)
 
-            return render_template('gardener/search_results.html', page_title=common_name, plant=plants[0],
+            return render_template('gardener/search_results.html', page_title=common_name, plant=search_results[0],
                                    plants=plants)
     else:
         return render_template('gardener/search.html')
