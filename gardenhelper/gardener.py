@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint
+
+from .auth import login_required
 from .models.gardener import Gardener
 from .models.plant import plants
 import html
@@ -8,6 +10,86 @@ import sklearn as sklearn
 
 bp = Blueprint('gardener', __name__)
 
+@bp.route('/')
+def index():
+    ###Get plants from database##
+    return render_template('gardener/index.html', posts=plants)
+
+
+@ bp.route('/create', methods=('GET', 'POST'))
+@ login_required
+def create():
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            ###Add plant to database
+            return redirect(url_for('gardener.index'))
+
+    return render_template('gardener/create.html'
+
+#Modified code from Flask tutorial, but will need to get plant by id. SQL query needs to be evaluated, probably will
+#use Pandas/NumPy/SkLearn here...
+
+def get_plant(id, check_gardener=True):
+    plant = get_db().execute(
+        'SELECT p.id, gardener_id'
+        ' FROM plant p JOIN user u ON p.author_id = u.id'
+        ' WHERE p.id = ?',
+        (id,)
+    ).fetchone()
+
+    if plant is None:
+        abort(404, "Plant id {0} doesn't exist.".format(id))
+
+    if check_gardener and plant['gardener_id'] != g.user['id']:
+        abort(403)
+
+    return plant
+
+@ bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@ login_required
+def update(id):
+    plant = get_plant(id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'UPDATE post SET title = ?, body = ?'
+                ' WHERE id = ?',
+                (title, body, id)
+            )
+            db.commit()
+            return redirect(url_for('plant.index'))
+
+    return render_template('blog/update.html', plant=plant)
+
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    get_plant(id)
+    db = get_db()
+    db.execute('DELETE FROM post WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('blog.index'))
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search_name():
