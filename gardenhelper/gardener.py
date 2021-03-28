@@ -10,10 +10,11 @@ import sklearn as sklearn
 
 bp = Blueprint('gardener', __name__)
 
+
 @bp.route('/')
 def index():
     ###Get plants from database##
-    return render_template('gardener/index.html', posts=plants)
+    return render_template('gardener/index.html', plants=plants)
 
 
 @ bp.route('/create', methods=('GET', 'POST'))
@@ -33,10 +34,12 @@ def create():
             ###Add plant to database
             return redirect(url_for('gardener.index'))
 
-    return render_template('gardener/create.html'
+    return render_template('gardener/create.html')
+
 
 #Modified code from Flask tutorial, but will need to get plant by id. SQL query needs to be evaluated, probably will
 #use Pandas/NumPy/SkLearn here...
+
 
 def get_plant(id, check_gardener=True):
     plant = get_db().execute(
@@ -53,6 +56,7 @@ def get_plant(id, check_gardener=True):
         abort(403)
 
     return plant
+
 
 @ bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @ login_required
@@ -79,7 +83,7 @@ def update(id):
             db.commit()
             return redirect(url_for('plant.index'))
 
-    return render_template('blog/update.html', plant=plant)
+    return render_template('plant/update.html', plant=plant)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -89,7 +93,8 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('plant.index'))
+
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search_name():
