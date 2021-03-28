@@ -13,21 +13,49 @@ bp = Blueprint('gardener', __name__)
 
 @bp.route('/')
 def index():
-    ###Get plants from database##
-    return render_template('gardener/index.html', plants=plants)
+    ###Get plants from database. Will store plants in a "garden"##
+    db = get_db()
+    garden = db.execute(
+        'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
+        'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
+        ' FROM post p JOIN user u ON p.gardener_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+    return render_template('gardener/index.html', garden=garden)
 
 
 @ bp.route('/create', methods=('GET', 'POST'))
 @ login_required
 def create():
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+        first_name = request.form['first_name']
+        middle_initial = request.form['middle_initial']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip = request.form['zip']
+        phone = request.form['phone']
         error = None
 
-        if not title:
-            error = 'Title is required.'
-
+        if not first_name:
+            error = 'First name is required.'
+        if not last_name:
+            error = 'Last name is required.'
+        if not email:
+            error = 'Email address is required.'
+        if not address_line1:
+            error = 'Address is required.'
+        if not city:
+            error = 'City is required.'
+        if not state:
+            error = 'State is required.'
+        if not zip:
+            error = 'Zip code is required.'
+        if not phone:
+            error = 'Phone number is required.'
         if error is not None:
             flash(error)
         else:
@@ -43,8 +71,9 @@ def create():
 
 def get_plant(id, check_gardener=True):
     plant = get_db().execute(
-        'SELECT p.id, gardener_id'
-        ' FROM plant p JOIN user u ON p.author_id = u.id'
+        'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
+        'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
+        ' FROM plant p JOIN user u ON p.gardener_id = u.id'
         ' WHERE p.id = ?',
         (id,)
     ).fetchone()
@@ -64,21 +93,29 @@ def update(id):
     plant = get_plant(id)
 
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+        date_planted = request.form['date_planted']
+        date_harvested = request.form['date_harvested']
+        last_watering = request.form['last_watering']
+        health_status = request.form['health_status']
+        soil_ph = request.form['soil_ph']
+        light = request.form['light']
+        soil_moisture = request.form['soil_moisture']
+        amount_harvested = request.form['amount_harvested']
         error = None
 
-        if not title:
-            error = 'Title is required.'
+        if not date_planted:
+            error = 'Date Planted is required.'
 
         if error is not None:
             flash(error)
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET title = ?, body = ?'
+                'UPDATE post SET date_planted = ?, date_harvested = ?, last_watering = ?, health_status = ?, '
+                'soil_ph = ?, light = ?, soil_moisturwe = ?, amount_harvested = ? ' 
                 ' WHERE id = ?',
-                (title, body, id)
+                (date_planted, date_harvested, last_watering, health_status, soil_ph, light, soil_moisture,
+                 amount_harvested, id)
             )
             db.commit()
             return redirect(url_for('plant.index'))
