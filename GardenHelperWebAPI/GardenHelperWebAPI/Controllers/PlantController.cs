@@ -48,7 +48,7 @@ namespace GardenHelperWebAPI.Controllers
             return Ok(plant);
         }
 
-        
+       
         [HttpPost]
         public IActionResult Post([FromBody] Plant value)
         {
@@ -57,7 +57,6 @@ namespace GardenHelperWebAPI.Controllers
             return Ok();
         }
 
-        // PUT api/movie
         [HttpPut]
         public IActionResult Put([FromBody] Plant plant)
         {
@@ -66,7 +65,6 @@ namespace GardenHelperWebAPI.Controllers
             return Ok();
         }
 
-        
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
