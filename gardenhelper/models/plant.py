@@ -1,7 +1,7 @@
 import json
 import requests
 from types import SimpleNamespace
-
+import pandas as pd
 
 class Plant:
     def __init__(self, _id, _growth_id, _specifications_id, _images_id, _distribution_id, _date_planted,
@@ -28,15 +28,18 @@ class Plant:
     def plant_decoder(obj):
         return Plant(obj['_id'], obj['_date_planted'], obj['_date_harvested'], obj['_last_watering'],
                      obj['_health_status'], obj['_height'], obj['_soil_ph'], obj['_light'], obj['_soil_moisture'],
-                     obj['_gardener_id'],obj['_gardener'])
+                     obj['_gardener_id'], obj['_gardener'])
 
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-response = requests.get('https://trefle.io/api/v1/plants/search?token=')
+#response = requests.get('https://trefle.io/api/v1/plants/search?token=')
 
 #json_data_dict = json.loads(response)
-plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+#plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
 
 
 ###plants = plant.plant_decoder(json_data_dict)
+response = requests.get('https://localhost:44325/api/plant/gardener=1/index', verify=False)
+plants = pd.read_json(response.content)
+print(plants)

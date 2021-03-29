@@ -15,8 +15,7 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 def index():
     ###Get plants from database. Will store plants in a "garden"##
-
-    garden = pd.dataframe(plants)
+    garden = plants
     #db = get_db()
     #garden = db.execute(
     #    'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
@@ -83,11 +82,11 @@ def get_plant(id, check_gardener=True):
         (id,)
     ).fetchone()
 
-    if plant is None:
-        abort(404, "Plant id {0} doesn't exist.".format(id))
+    #if plant is None:
+        #abort(404, "Plant id {0} doesn't exist.".format(id))
 
-    if check_gardener and plant['gardener_id'] != g.user['id']:
-        abort(403)
+    #if check_gardener and plant['gardener_id'] != g.user['id']:
+        #abort(403)
 
     return plant
 
