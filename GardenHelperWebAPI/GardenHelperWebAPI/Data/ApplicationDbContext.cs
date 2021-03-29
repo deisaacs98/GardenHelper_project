@@ -46,8 +46,8 @@ namespace GardenHelperWebAPI.Data
                     Light=10, 
                     SoilMoisture=0, 
                     AmountHarvested=0,
-                    GardenerId=1
-               }
+                    GardenerId=1,
+                }
             );
         }
 

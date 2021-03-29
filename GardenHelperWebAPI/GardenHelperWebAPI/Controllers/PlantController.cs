@@ -19,18 +19,25 @@ namespace GardenHelperWebAPI.Controllers
         {
             _context = context;
         }
-        // GET api/movie
+        // GET Plants in database
         [HttpGet]
         public IActionResult Get()
         {
             var plants = _context.Plants;
             return Ok(plants);
         }
-        
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        // GET Plants By Gardener
+        [HttpGet("{gardener_id}")]
+        public IActionResult Get(int gardener_id)
         {
-            var plant = _context.Plants.Where(m => m.Id == id);
+            var plant = _context.Plants.Where(m => m.GardenerId == gardener_id);
+            return Ok(plant);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id, int gardener_id)
+        {
+            var plant = _context.Plants.Where(m => m.Id == id && m.GardenerId == gardener_id);
             return Ok(plant);
         }
 

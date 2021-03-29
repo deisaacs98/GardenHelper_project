@@ -110,3 +110,4 @@ D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debu
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\GardenHelperWebAPI.dll
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\GardenHelperWebAPI.pdb
 D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\GardenHelperWebAPI.genruntimeconfig.cache
+D:\Isaac\DevCodeCamp\gardenhelper\GardenHelperWebAPI\GardenHelperWebAPI\obj\Debug\netcoreapp3.1\GardenHelperWebAPI.csprojAssemblyReference.cache
