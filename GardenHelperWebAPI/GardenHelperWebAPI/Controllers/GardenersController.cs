@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using GardenHelperWebAPI.Data;
 using GardenHelperWebAPI.Models;
+
 
 namespace GardenHelperWebAPI.Controllers
 {
@@ -23,25 +23,21 @@ namespace GardenHelperWebAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            
             var gardener = _context.Gardeners;
             return Ok(gardener);
         }
-
         
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            
-            var movie = _context.Gardeners.Where(m => m.Id == id);
-            return Ok(movie);
+            var gardener = _context.Gardeners.Where(m => m.Id == id);
+            return Ok(gardener);
         }
 
         // POST api/movie
         [HttpPost]
         public IActionResult Post([FromBody] Gardener value)
         {
-         
             _context.Gardeners.Add(value);
             _context.SaveChanges();
             return Ok();
@@ -51,7 +47,6 @@ namespace GardenHelperWebAPI.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] Gardener gardener)
         {
-            
             _context.Gardeners.Update(gardener);
             _context.SaveChanges();
             return Ok();
@@ -61,7 +56,6 @@ namespace GardenHelperWebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            
             var selectedGardener = _context.Gardeners.FirstOrDefault(m => m.Id == id);
             _context.Gardeners.Remove(selectedGardener);
             _context.SaveChanges();

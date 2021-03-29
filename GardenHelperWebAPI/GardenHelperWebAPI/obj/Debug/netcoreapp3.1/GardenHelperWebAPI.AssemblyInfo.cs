@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap4")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-GardenHelperWebAPI-7222B9C0-38AF-4EE6-9B25-8D4997A7E1D3")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("GardenHelperWebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]

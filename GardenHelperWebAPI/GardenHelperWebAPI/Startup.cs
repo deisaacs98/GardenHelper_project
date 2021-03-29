@@ -8,7 +8,7 @@ using GardenHelperWebAPI.Data;
 
 namespace GardenHelperWebAPI
 {
-    public class Startup
+   public class Startup
     {
         public Startup(IConfiguration configuration)
         {
