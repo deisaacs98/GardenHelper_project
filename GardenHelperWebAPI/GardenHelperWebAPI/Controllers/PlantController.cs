@@ -48,7 +48,7 @@ namespace GardenHelperWebAPI.Controllers
             return Ok(plant);
         }
 
-        // POST api/movie
+        
         [HttpPost]
         public IActionResult Post([FromBody] Plant value)
         {
