@@ -6,7 +6,7 @@ from types import SimpleNamespace
 class Plant:
     def __init__(self, _id, _growth_id, _specifications_id, _images_id, _distribution_id, _date_planted,
                  _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,_soil_moisture,
-                 _amount_harvested):
+                 _amount_harvested,_gardener_id,_gardener):
         self.id = _id
         self.growth_id = _growth_id
         self.specifications_id = _specifications_id
@@ -21,11 +21,14 @@ class Plant:
         self.light = _light
         self.soil_moisture = _soil_moisture
         self.amount_harvested = _amount_harvested
+        self.gardener_id=_gardener_id
+        self.gardener=_gardener
 
     @staticmethod
     def plant_decoder(obj):
         return Plant(obj['_id'], obj['_date_planted'], obj['_date_harvested'], obj['_last_watering'],
-                     obj['_health_status'], obj['_height'], obj['_soil_ph'], obj['_light'], obj['_soil_moisture'])
+                     obj['_health_status'], obj['_height'], obj['_soil_ph'], obj['_light'], obj['_soil_moisture'],
+                     obj['_gardener_id'],obj['_gardener'])
 
 
 ##Not sure what I will be putting in here at the moment.

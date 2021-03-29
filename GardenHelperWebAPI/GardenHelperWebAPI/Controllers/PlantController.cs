@@ -12,10 +12,10 @@ namespace GardenHelperWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GardenersController : ControllerBase
+    public class PlantController : ControllerBase
     {
         private ApplicationDbContext _context;
-        public GardenersController(ApplicationDbContext context)
+        public PlantController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,31 +23,31 @@ namespace GardenHelperWebAPI.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var gardener = _context.Gardeners;
-            return Ok(gardener);
+            var plants = _context.Plants;
+            return Ok(plants);
         }
         
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var gardener = _context.Gardeners.Where(m => m.Id == id);
-            return Ok(gardener);
+            var plant = _context.Plants.Where(m => m.Id == id);
+            return Ok(plant);
         }
 
         // POST api/movie
         [HttpPost]
-        public IActionResult Post([FromBody] Gardener value)
+        public IActionResult Post([FromBody] Plant value)
         {
-            _context.Gardeners.Add(value);
+            _context.Plants.Add(value);
             _context.SaveChanges();
             return Ok();
         }
 
         // PUT api/movie
         [HttpPut]
-        public IActionResult Put([FromBody] Gardener gardener)
+        public IActionResult Put([FromBody] Plant plant)
         {
-            _context.Gardeners.Update(gardener);
+            _context.Plants.Update(plant);
             _context.SaveChanges();
             return Ok();
         }
@@ -56,8 +56,8 @@ namespace GardenHelperWebAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var selectedGardener = _context.Gardeners.FirstOrDefault(m => m.Id == id);
-            _context.Gardeners.Remove(selectedGardener);
+            var selectedPlant = _context.Plants.FirstOrDefault(m => m.Id == id);
+            _context.Plants.Remove(selectedPlant);
             _context.SaveChanges();
             return Ok();
         }

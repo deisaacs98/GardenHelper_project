@@ -14,17 +14,44 @@ namespace GardenHelperWebAPI.Data
         {
             base.OnModelCreating(modelBuilder);
             // Seed data - needs migration
-            
             modelBuilder.Entity<Gardener>().HasData(
-                new Gardener { Id = 1, FirstName="John", MiddleInitial="J", LastName="Gardener", 
-                               AddressLine1="", AddressLine2="", City="", State="", Zip=90210, 
-                                Email="", Phone = 0, Lat=0, Lng=0}
-                
-
+                new Gardener
+                {
+                    Id = 1,
+                    FirstName = "John",
+                    MiddleInitial = "J",
+                    LastName = "Gardener",
+                    AddressLine1 = "",
+                    AddressLine2 = "",
+                    City = "",
+                    State = "",
+                    Zip = 90210,
+                    Email = "",
+                    Phone = 0,
+                    Lat = 0,
+                    Lng = 0
+                }
+            );
+            modelBuilder.Entity<Plant>().HasData(
+                new Plant { Id=1, 
+                    GrowthId=1,
+                    SpecificationsId=1,
+                    ImagesId=1, 
+                    DistributionId=1,
+                    DatePlanted=new System.DateTime(2020-3-28),
+                    DateHarvested = new System.DateTime(2020 - 3 - 29),
+                    LastWatering = new System.DateTime(2020 - 3 - 28),
+                    HealthStatus="", 
+                    SoilPH=7, 
+                    Light=10, 
+                    SoilMoisture=0, 
+                    AmountHarvested=0,
+                    GardenerId=1
+               }
             );
         }
 
-
         public DbSet<Gardener> Gardeners { get; set; }
+        public DbSet<Plant> Plants { get; set; }
     }
 }
