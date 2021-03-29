@@ -13,6 +13,22 @@ namespace GardenHelperWebAPI.Data
             : base(options)
         {
         }
-        public DbSet<GardenHelperWebAPI.Models.Gardener> Gardeners { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // Seed data - needs migration
+            
+            modelBuilder.Entity<Gardener>().HasData(
+                new Gardener { Id = 1, FirstName="John", MiddleInitial="J", LastName="Gardener", 
+                               AddressLine1="", AddressLine2="", City="", State="", Zip=90210, 
+                                Email="", Phone = 0, Lat=0, Lng=0, Garden=null}
+                
+
+            );
+        }
+
+
+        public DbSet<Gardener> Gardeners { get; set; }
     }
 }

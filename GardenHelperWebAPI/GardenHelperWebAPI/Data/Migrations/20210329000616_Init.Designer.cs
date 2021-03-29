@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenHelperWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210326180045_Init")]
+    [Migration("20210329000616_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,6 +67,24 @@ namespace GardenHelperWebAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gardeners");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressLine1 = "",
+                            AddressLine2 = "",
+                            City = "",
+                            Email = "",
+                            FirstName = "John",
+                            LastName = "Gardener",
+                            Lat = 0.0,
+                            Lng = 0.0,
+                            MiddleInitial = "J",
+                            Phone = 0,
+                            State = "",
+                            Zip = 90210
+                        });
                 });
 
             modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
@@ -76,43 +94,46 @@ namespace GardenHelperWebAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("AmountHarvested")
+                    b.Property<double?>("AmountHarvested")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("DateHarvested")
+                    b.Property<DateTime?>("DateHarvested")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DatePlanted")
+                    b.Property<DateTime?>("DatePlanted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DistributionId")
+                    b.Property<int?>("DistributionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GardenerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GrowthId")
+                    b.Property<int?>("GrowthId")
                         .HasColumnType("int");
 
                     b.Property<string>("HealthStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ImagesId")
+                    b.Property<double?>("Height")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("ImagesId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastWatering")
+                    b.Property<DateTime?>("LastWatering")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Light")
+                    b.Property<double?>("Light")
                         .HasColumnType("float");
 
-                    b.Property<double>("SoilMoisture")
+                    b.Property<double?>("SoilMoisture")
                         .HasColumnType("float");
 
-                    b.Property<double>("SoilPH")
+                    b.Property<double?>("SoilPH")
                         .HasColumnType("float");
 
-                    b.Property<int>("SpecificationsId")
+                    b.Property<int?>("SpecificationsId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -265,12 +286,10 @@ namespace GardenHelperWebAPI.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -307,12 +326,10 @@ namespace GardenHelperWebAPI.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

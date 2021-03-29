@@ -116,8 +116,8 @@ namespace GardenHelperWebAPI.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
@@ -161,8 +161,8 @@ namespace GardenHelperWebAPI.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(maxLength: 128, nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -182,18 +182,19 @@ namespace GardenHelperWebAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GrowthId = table.Column<int>(nullable: false),
-                    SpecificationsId = table.Column<int>(nullable: false),
-                    ImagesId = table.Column<int>(nullable: false),
-                    DistributionId = table.Column<int>(nullable: false),
-                    DatePlanted = table.Column<DateTime>(nullable: false),
-                    DateHarvested = table.Column<DateTime>(nullable: false),
-                    LastWatering = table.Column<DateTime>(nullable: false),
+                    GrowthId = table.Column<int>(nullable: true),
+                    SpecificationsId = table.Column<int>(nullable: true),
+                    ImagesId = table.Column<int>(nullable: true),
+                    DistributionId = table.Column<int>(nullable: true),
+                    DatePlanted = table.Column<DateTime>(nullable: true),
+                    DateHarvested = table.Column<DateTime>(nullable: true),
+                    LastWatering = table.Column<DateTime>(nullable: true),
                     HealthStatus = table.Column<string>(nullable: true),
-                    SoilPH = table.Column<double>(nullable: false),
-                    Light = table.Column<double>(nullable: false),
-                    SoilMoisture = table.Column<double>(nullable: false),
-                    AmountHarvested = table.Column<double>(nullable: false),
+                    Height = table.Column<double>(nullable: true),
+                    SoilPH = table.Column<double>(nullable: true),
+                    Light = table.Column<double>(nullable: true),
+                    SoilMoisture = table.Column<double>(nullable: true),
+                    AmountHarvested = table.Column<double>(nullable: true),
                     GardenerId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -206,6 +207,11 @@ namespace GardenHelperWebAPI.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Gardeners",
+                columns: new[] { "Id", "AddressLine1", "AddressLine2", "City", "Email", "FirstName", "LastName", "Lat", "Lng", "MiddleInitial", "Phone", "State", "Zip" },
+                values: new object[] { 1, "", "", "", "", "John", "Gardener", 0.0, 0.0, "J", 0, "", 90210 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

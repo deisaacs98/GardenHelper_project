@@ -31,7 +31,7 @@ class Gardener:
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-#response = requests.get('put REST API url here')
+response = requests.get('https://localhost:44308/api/garden')
 
 #json_data_dict = json.loads(response)
 

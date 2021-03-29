@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint
 
 from .auth import login_required
+from .db import get_db
 from .models.gardener import Gardener
 from .models.plant import plants
 import html
@@ -14,13 +15,15 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 def index():
     ###Get plants from database. Will store plants in a "garden"##
-    db = get_db()
-    garden = db.execute(
-        'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
-        'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
-        ' FROM post p JOIN user u ON p.gardener_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
+
+    garden = pd.dataframe(plants)
+    #db = get_db()
+    #garden = db.execute(
+    #    'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
+    #    'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
+    #    ' FROM post p JOIN user u ON p.gardener_id = u.id'
+    #    ' ORDER BY created DESC'
+    #).fetchall()
     return render_template('gardener/index.html', garden=garden)
 
 
@@ -65,10 +68,12 @@ def create():
     return render_template('gardener/create.html')
 
 
-#Modified code from Flask tutorial, but will need to get plant by id. SQL query needs to be evaluated, probably will
-#use Pandas/NumPy/SkLearn here...
-
-
+###Modified code from Flask tutorial, but will need to get plant by id. SQL query needs to be evaluated, probably will
+###use Pandas/NumPy/SkLearn here...
+###Also, thinking I need to use REST API instead of local username database...
+###
+###The login database is still necessary because it is the most practical way to have user accounts.
+###I just think it would be wise to store the heavy data in the REST API.
 def get_plant(id, check_gardener=True):
     plant = get_db().execute(
         'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
