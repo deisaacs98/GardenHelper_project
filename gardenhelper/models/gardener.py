@@ -6,7 +6,7 @@ import pandas as pd
 
 class Gardener:
 
-    def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1,_address_line2, _city,
+    def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1, _address_line2, _city,
                  _state, _zip, _phone, _lat, _lng):
         self.Id = _id
         self.FirstName = _first_name
@@ -32,7 +32,8 @@ class Gardener:
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-response = requests.get('https://localhost:44325/api/plant/gardener=1', verify=False)
+
+response = requests.get('https://localhost:44325/api/plant/gardener={}', verify=False)
 gardeners = pd.read_json(response.content)
 print(gardeners)
 

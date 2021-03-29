@@ -1,6 +1,8 @@
+import requests
 from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint
 
 from .auth import login_required
+from .auth import load_logged_in_user
 from .db import get_db
 from .models.gardener import Gardener
 from .models.plant import plants
@@ -29,39 +31,44 @@ def index():
 @ bp.route('/create', methods=('GET', 'POST'))
 @ login_required
 def create():
+    user = load_logged_in_user
     if request.method == 'POST':
-        first_name = request.form['first_name']
-        middle_initial = request.form['middle_initial']
-        last_name = request.form['last_name']
-        email = request.form['email']
-        address_line1 = request.form['address_line1']
-        address_line2 = request.form['address_line2']
-        city = request.form['city']
-        state = request.form['state']
-        zip = request.form['zip']
-        phone = request.form['phone']
+
+        Id = user.id
+        FirstName=request.form['first_name']
+        MiddleInitial = request.form['middle_initial']
+        LastName = request.form['last_name']
+        Email = request.form['email']
+        AddressLine1 = request.form['address_line1']
+        AddressLine2 = request.form['address_line2']
+        City = request.form['city']
+        State = request.form['state']
+        Zip = request.form['zip']
+        Phone = request.form['phone']
         error = None
 
-        if not first_name:
+        if not FirstName:
             error = 'First name is required.'
-        if not last_name:
+        if not LastName:
             error = 'Last name is required.'
-        if not email:
+        if not Email:
             error = 'Email address is required.'
-        if not address_line1:
+        if not AddressLine1:
             error = 'Address is required.'
-        if not city:
+        if not City:
             error = 'City is required.'
-        if not state:
+        if not State:
             error = 'State is required.'
-        if not zip:
+        if not Zip:
             error = 'Zip code is required.'
-        if not phone:
+        if not Phone:
             error = 'Phone number is required.'
         if error is not None:
             flash(error)
         else:
-            ###Add plant to database
+            ###Add gardener to database.
+            ##Need to geocode address here.
+            requests.post('https://localhost:44325/api/plant/', verify=False)
             return redirect(url_for('gardener.index'))
 
     return render_template('gardener/create.html')
@@ -74,13 +81,8 @@ def create():
 ###The login database is still necessary because it is the most practical way to have user accounts.
 ###I just think it would be wise to store the heavy data in the REST API.
 def get_plant(id, check_gardener=True):
-    plant = get_db().execute(
-        'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
-        'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
-        ' FROM plant p JOIN user u ON p.gardener_id = u.id'
-        ' WHERE p.id = ?',
-        (id,)
-    ).fetchone()
+    garden = pd.DataFrame(plants)
+    plant = garden[garden["GardenerId"] == id]
 
     #if plant is None:
         #abort(404, "Plant id {0} doesn't exist.".format(id))
