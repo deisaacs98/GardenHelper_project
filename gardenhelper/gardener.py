@@ -17,7 +17,8 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 def index():
     ###Get plants from database. Will store plants in a "garden"##
-    garden = plants
+
+
     #db = get_db()
     #garden = db.execute(
     #    'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
@@ -25,7 +26,7 @@ def index():
     #    ' FROM post p JOIN user u ON p.gardener_id = u.id'
     #    ' ORDER BY created DESC'
     #).fetchall()
-    return render_template('gardener/index.html', garden=garden)
+    return render_template('gardener/index.html', garden=plants)
 
 
 @ bp.route('/create', methods=('GET', 'POST'))
