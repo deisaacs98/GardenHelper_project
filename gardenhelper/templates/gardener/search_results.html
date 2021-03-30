@@ -17,6 +17,7 @@
                 <table border="1">
                     <thead>
                         <tr>
+                            <th></th>
                             {% for column in columns %}
                             <th>{{ column }}</th>
                             {% endfor %}
@@ -25,9 +26,13 @@
                     <tbody>
                         {% for result in search_results %}
                         <tr>
+                            <td>
+                                <img src={{result["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            </td>
                             {% for column in columns %}
                             <td>{{ result[column] }}</td>
                             {% endfor %}
+                            <td>{{ image }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
