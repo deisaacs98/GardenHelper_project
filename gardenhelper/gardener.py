@@ -148,31 +148,12 @@ def delete(id):
 def search_name():
     if request.method == 'POST':
         common_name = request.form['common_name']
-        error = None
-        results = []
-        response = requests.get('https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
+        response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
         search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+        print(search_results)
 
-        if not common_name:
-            error = 'You must enter a name'
-        for species in search_results:
-            if common_name.upper() == species.common_name.upper():
-                error_common_name = False
-                break
-            else:
-                error_common_name = True
-        if error_common_name == True:
-            error = 'That plant is not in the database'
-        if error is not None:
-            flash(error)
-            return render_template('gardener/search.html', error=error)
-        else:
-            for species in search_results:
-                if species.common_name.upper() == common_name.upper():
-                    common_name = species.common_name
-                    results.append(species)
+        return render_template('gardener/search_results.html', page_title=common_name,
+                               search_results=search_results)
 
-            return render_template('gardener/search_results.html', page_title=common_name,
-                                   results=results)
     else:
         return render_template('gardener/search.html')

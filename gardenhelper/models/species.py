@@ -31,7 +31,7 @@ class Species:
     @staticmethod
     def species_decoder(obj):
         return Species(obj['_id'], obj['_growth_id'], obj['_distribution_id'],  obj['_specifications_id'],
-                       obj['_images_id'], obj['_images_url'], obj['common_name'],obj['_scientific_name'],
+                       obj['_images_id'], obj['_images_url'], obj['common_name'], obj['_scientific_name'],
                        obj['_status'],  obj['_rank'], obj['_family_common_name'], obj['_family'], obj['_genus_id'],
                        obj['_genus'], obj['_edible_part'], obj['_edible'], obj['_vegetable'], obj['_observations'])
 
