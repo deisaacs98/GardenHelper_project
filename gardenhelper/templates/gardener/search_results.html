@@ -14,7 +14,24 @@
     <div class="col-md-3">
         <div class="card">
             <div class="card-body">
-
+                <table border="1">
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in search_results %}
+                        <tr>
+                            {% for column in columns %}
+                            <td>{{ result[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
 

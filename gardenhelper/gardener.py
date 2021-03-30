@@ -149,11 +149,10 @@ def search_name():
     if request.method == 'POST':
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
-        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         print(search_results)
-
+        columns = ["common_name", "family", "family_common_name", "image_url", "scientific_name"]
         return render_template('gardener/search_results.html', page_title=common_name,
-                               search_results=search_results)
-
+                               search_results=search_results, columns=columns)
     else:
         return render_template('gardener/search.html')
