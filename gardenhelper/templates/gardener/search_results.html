@@ -18,7 +18,7 @@
                     <thead>
                         <tr>
                             {% for column in columns %}
-                            <th>{{ col }}</th>
+                            <th>{{ column }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
@@ -26,7 +26,7 @@
                         {% for result in search_results %}
                         <tr>
                             {% for column in columns %}
-                            <td>{{ result[col] }}</td>
+                            <td>{{ result[column] }}</td>
                             {% endfor %}
                         </tr>
                         {% endfor %}
