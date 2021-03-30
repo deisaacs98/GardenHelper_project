@@ -1,9 +1,13 @@
+import json
+from types import SimpleNamespace
+
 import requests
 from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint
 
 from .auth import login_required
 from .auth import load_logged_in_user
 from .db import get_db
+from .api_keys import trefle_token
 from .models.gardener import Gardener
 from .models.plant import plants
 import html
@@ -119,7 +123,7 @@ def update(id):
             db = get_db()
             db.execute(
                 'UPDATE post SET date_planted = ?, date_harvested = ?, last_watering = ?, health_status = ?, '
-                'soil_ph = ?, light = ?, soil_moisturwe = ?, amount_harvested = ? ' 
+                'soil_ph = ?, light = ?, soil_moisture = ?, amount_harvested = ? ' 
                 ' WHERE id = ?',
                 (date_planted, date_harvested, last_watering, health_status, soil_ph, light, soil_moisture,
                  amount_harvested, id)
@@ -145,25 +149,30 @@ def search_name():
     if request.method == 'POST':
         common_name = request.form['common_name']
         error = None
-        search_results = []
+        results = []
+        response = requests.get('https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
+        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+
         if not common_name:
             error = 'You must enter a name'
-        for plant in plants:
-            if common_name.upper() == plant.common_name.upper():
+        for species in search_results:
+            if common_name.upper() == species.common_name.upper():
                 error_common_name = False
                 break
             else:
                 error_common_name = True
+        if error_common_name == True:
+            error = 'That plant is not in the database'
         if error is not None:
             flash(error)
             return render_template('gardener/search.html', error=error)
         else:
-            for plant in plants:
-                if plant.common_name.upper() == common_name.upper():
-                    common_name = plant.common_name
-                    search_results.append(plant)
+            for species in search_results:
+                if species.common_name.upper() == common_name.upper():
+                    common_name = species.common_name
+                    results.append(species)
 
-            return render_template('gardener/search_results.html', page_title=common_name, plant=search_results[0],
-                                   plants=plants)
+            return render_template('gardener/search_results.html', page_title=common_name,
+                                   results=results)
     else:
         return render_template('gardener/search.html')
