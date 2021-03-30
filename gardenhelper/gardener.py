@@ -1,13 +1,12 @@
 import json
 from types import SimpleNamespace
-
 import requests
-from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint
-
+from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response
 from .auth import login_required
 from .auth import load_logged_in_user
 from .db import get_db
 from .api_keys import trefle_token
+from .models import gardener
 from .models.gardener import Gardener
 from .models.plant import plants
 import html
@@ -144,15 +143,42 @@ def delete(id):
     return redirect(url_for('plant.index'))
 
 
+
+
+
 @bp.route('/search', methods=['GET', 'POST'])
 def search_name():
-    if request.method == 'POST':
+    if request.method == 'POST' and gardener.first_search:
+        gardener.first_search = False
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
         search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
-        print(search_results)
-        columns = ["common_name", "family", "family_common_name", "scientific_name"]
-        return render_template('gardener/search_results.html', page_title=common_name,
+        columns = ["common_name", "scientific_name", "family_common_name", "family"]
+        return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
+                               columns=columns)
+    elif request.method == 'POST' and not gardener.first_search:
+        gardener.first_search = True
+        common_name = request.form['common_name']
+        response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
+                                f'{common_name}')
+        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        columns = ["common_name", "scientific_name", "family_common_name", "family"]
+        return render_template('gardener/plant_details.html', page_title=common_name,
                                search_results=search_results, columns=columns)
     else:
+        gardener.first_search = True
         return render_template('gardener/search.html')
+
+
+@bp.route('/search_results', methods=['GET', 'POST'])
+def view_plant(common_name, search_results, columns):
+    if request.method == 'POST':
+        response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
+                                f'{common_name}')
+        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        columns = ["common_name", "scientific_name", "family_common_name", "family"]
+        return render_template('gardener/plant_details.html', page_title=common_name,
+                               search_results=search_results, columns=columns)
+    else:
+        return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
+                               columns=columns)

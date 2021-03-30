@@ -36,9 +36,8 @@
                             <td>{{ image }}</td>
                             <td>
                                 <form method="post">
-                                    <input name="common_name" id="common_name" type="hidden"
-                                           value="{{ result['common_name']}}">
-                                    <input type="submit" value="View Details">
+                                    <input name="common_name"  id="common_name" value="{{ request.form['common_name']}}">
+                                    <input type="submit" value="Add to Garden">
                                 </form>
                             </td>
                         </tr>
@@ -47,6 +46,7 @@
                 </table>
             </div>
         </div>
+
     </div>
 </div>
 
