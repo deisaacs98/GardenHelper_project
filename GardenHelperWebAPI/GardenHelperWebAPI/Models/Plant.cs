@@ -22,8 +22,6 @@ namespace GardenHelperWebAPI.Models
         public double AmountHarvested { get; set; }
 
         public int GardenerId { get; set; }
-        [ForeignKey("GardenerId")]
-        public Gardener Gardener { get; set; }
 
     }
 }

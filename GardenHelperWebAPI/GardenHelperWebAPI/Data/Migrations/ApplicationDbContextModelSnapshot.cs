@@ -127,8 +127,6 @@ namespace GardenHelperWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GardenerId");
-
                     b.ToTable("Plants");
 
                     b.HasData(
@@ -147,15 +145,6 @@ namespace GardenHelperWebAPI.Migrations
                             SoilMoisture = 0.0,
                             SoilPH = 7.0
                         });
-                });
-
-            modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
-                {
-                    b.HasOne("GardenHelperWebAPI.Models.Gardener", "Gardener")
-                        .WithMany()
-                        .HasForeignKey("GardenerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

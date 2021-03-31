@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenHelperWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210331135539_Init")]
+    [Migration("20210331221232_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,8 +129,6 @@ namespace GardenHelperWebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GardenerId");
-
                     b.ToTable("Plants");
 
                     b.HasData(
@@ -149,15 +147,6 @@ namespace GardenHelperWebAPI.Migrations
                             SoilMoisture = 0.0,
                             SoilPH = 7.0
                         });
-                });
-
-            modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
-                {
-                    b.HasOne("GardenHelperWebAPI.Models.Gardener", "Gardener")
-                        .WithMany()
-                        .HasForeignKey("GardenerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -52,12 +52,6 @@ namespace GardenHelperWebAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plants", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Plants_Gardeners_GardenerId",
-                        column: x => x.GardenerId,
-                        principalTable: "Gardeners",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -69,20 +63,15 @@ namespace GardenHelperWebAPI.Migrations
                 table: "Plants",
                 columns: new[] { "Id", "AmountHarvested", "CommonName", "DateHarvested", "DatePlanted", "GardenerId", "HealthStatus", "Height", "LastWatering", "Light", "SoilMoisture", "SoilPH" },
                 values: new object[] { 1, 0.0, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1988), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 1, "", 0.0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 10.0, 0.0, 7.0 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Plants_GardenerId",
-                table: "Plants",
-                column: "GardenerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Plants");
+                name: "Gardeners");
 
             migrationBuilder.DropTable(
-                name: "Gardeners");
+                name: "Plants");
         }
     }
 }
