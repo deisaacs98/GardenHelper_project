@@ -33,10 +33,10 @@
                             {% for column in columns %}
                             <td>{{ result[column] }}</td>
                             {% endfor %}
-                            <td>{{ image }}</td>
                             <td>
                                 <form method="post">
-                                    <input name="common_name"  id="common_name" value="{{ request.form['common_name']}}">
+                                    <input name="common_name"  type="hidden"
+                                           id="common_name" value="{{ result[column]}}">
                                     <input type="submit" value="Add to Garden">
                                 </form>
                             </td>

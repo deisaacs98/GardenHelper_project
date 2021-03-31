@@ -10,10 +10,7 @@ namespace GardenHelperWebAPI.Models
     public class Plant
     {
         public int Id { get; set; }
-        public int GrowthId { get; set; }
-        public int SpecificationsId { get; set; }
-        public int ImagesId { get; set; }
-        public int DistributionId { get; set; }
+        public string CommonName { get; set; }
         public DateTime DatePlanted { get; set; }
         public DateTime DateHarvested { get; set; }
         public DateTime LastWatering { get; set; }

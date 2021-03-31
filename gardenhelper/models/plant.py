@@ -2,33 +2,32 @@ import json
 import requests
 from types import SimpleNamespace
 import pandas as pd
+from gardenhelper.auth import load_logged_in_user, login_required
+
 
 class Plant:
-    def __init__(self, _id, _growth_id, _specifications_id, _images_id, _distribution_id, _date_planted,
+    def __init__(self, _id, _common_name, _date_planted,
                  _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,_soil_moisture,
                  _amount_harvested,_gardener_id,_gardener):
         self.id = _id
-        self.growth_id = _growth_id
-        self.specifications_id = _specifications_id
-        self.images_id = _images_id
-        self.distribution_id = _distribution_id
-        self.date_planted = _date_planted
-        self.date_harvested = _date_harvested
-        self.last_watering = _last_watering
-        self.health_status = _health_status
+        self.commonName = _common_name
+        self.datePlanted = _date_planted
+        self.dateHarvested = _date_harvested
+        self.lastWatering = _last_watering
+        self.healthStatus = _health_status
         self.height = _height
-        self.soil_ph = _soil_ph
+        self.soilPH = _soil_ph
         self.light = _light
-        self.soil_moisture = _soil_moisture
-        self.amount_harvested = _amount_harvested
-        self.gardener_id=_gardener_id
-        self.gardener=_gardener
+        self.soilMoisture = _soil_moisture
+        self.amountHarvested = _amount_harvested
+        self.gardenerId = _gardener_id
+        self.gardener = _gardener
 
     @staticmethod
     def plant_decoder(obj):
-        return Plant(obj['_id'], obj['_date_planted'], obj['_date_harvested'], obj['_last_watering'],
-                     obj['_health_status'], obj['_height'], obj['_soil_ph'], obj['_light'], obj['_soil_moisture'],
-                     obj['_gardener_id'], obj['_gardener'])
+        return Plant(obj['id'], obj,['commonName'], obj['datePlanted'], obj['dateHarvested'], obj['lastWatering'],
+                     obj['healthStatus'], obj['height'], obj['soilPH'], obj['light'], obj['soilMoisture'],
+                     obj['gardenerId'], obj['gardener'])
 
 
 ##Not sure what I will be putting in here at the moment.
@@ -40,6 +39,6 @@ class Plant:
 
 
 ###plants = plant.plant_decoder(json_data_dict)
-response = requests.get('https://localhost:44325/api/plant/gardener=1/index', verify=False)
-plants = pd.read_json(response.content)
-print(plants)
+
+
+

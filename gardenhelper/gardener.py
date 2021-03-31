@@ -1,14 +1,14 @@
 import json
 from types import SimpleNamespace
 import requests
-from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response
+from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response, session
 from .auth import login_required
 from .auth import load_logged_in_user
 from .db import get_db
 from .api_keys import trefle_token
 from .models import gardener
 from .models.gardener import Gardener
-from .models.plant import plants
+from .models.plant import Plant
 import html
 import pandas as pd
 import numpy as np
@@ -18,17 +18,13 @@ bp = Blueprint('gardener', __name__)
 
 
 @bp.route('/')
+@login_required
 def index():
-    ###Get plants from database. Will store plants in a "garden"##
-
-
-    #db = get_db()
-    #garden = db.execute(
-    #    'SELECT p.id, growth_id, specifications_id, images_id, distribution_id, date_planted, date_harvested, '
-    #    'last_watering, health_status, soil_ph, light, soil_moisture, amount_harvested'
-    #    ' FROM post p JOIN user u ON p.gardener_id = u.id'
-    #    ' ORDER BY created DESC'
-    #).fetchall()
+    user_id = session.get('user_id')
+    response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
+    print(response.content)
+    #plants = Plant.plant_decoder(json.loads(response.content,object_hook=lambda d: SimpleNamespace(**d)))
+    plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
     return render_template('gardener/index.html', garden=plants)
 
 
@@ -39,7 +35,7 @@ def create():
     if request.method == 'POST':
 
         Id = user.id
-        FirstName=request.form['first_name']
+        FirstName = request.form['first_name']
         MiddleInitial = request.form['middle_initial']
         LastName = request.form['last_name']
         Email = request.form['email']
@@ -84,6 +80,7 @@ def create():
 ###
 ###The login database is still necessary because it is the most practical way to have user accounts.
 ###I just think it would be wise to store the heavy data in the REST API.
+@login_required
 def get_plant(id, check_gardener=True):
     garden = pd.DataFrame(plants)
     plant = garden[garden["GardenerId"] == id]
@@ -148,7 +145,7 @@ def delete(id):
 
 @bp.route('/search', methods=['GET', 'POST'])
 def search_name():
-    if request.method == 'POST' and gardener.first_search:
+    if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
         gardener.first_search = False
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
@@ -156,8 +153,8 @@ def search_name():
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
         return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
                                columns=columns)
-    elif request.method == 'POST' and not gardener.first_search:
-        gardener.first_search = True
+    elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
+        gardener.found_plant = True
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
                                 f'{common_name}')
@@ -165,6 +162,20 @@ def search_name():
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
         return render_template('gardener/plant_details.html', page_title=common_name,
                                search_results=search_results, columns=columns)
+    elif request.method == 'POST' and not gardener.first_search and gardener.found_plant:
+        gardener.first_search = True
+        gardener.found_plant = False
+        common_name = request.form['common_name']
+        user_id = session.get('user_id')
+        plant = {'commonName': common_name, 'GardenerId': user_id}
+        response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
+        print(response.content)
+
+        #response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
+                                #f'{common_name}')
+        #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        #columns = ["common_name", "scientific_name", "family_common_name", "family"]
+        return redirect(url_for('gardener.index'))
     else:
         gardener.first_search = True
         return render_template('gardener/search.html')

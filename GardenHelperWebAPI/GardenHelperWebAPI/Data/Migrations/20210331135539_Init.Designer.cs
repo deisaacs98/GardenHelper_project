@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GardenHelperWebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210329142034_Init")]
+    [Migration("20210331135539_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -97,19 +97,16 @@ namespace GardenHelperWebAPI.Migrations
                     b.Property<double>("AmountHarvested")
                         .HasColumnType("float");
 
+                    b.Property<string>("CommonName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateHarvested")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DatePlanted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DistributionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("GardenerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GrowthId")
                         .HasColumnType("int");
 
                     b.Property<string>("HealthStatus")
@@ -117,9 +114,6 @@ namespace GardenHelperWebAPI.Migrations
 
                     b.Property<double>("Height")
                         .HasColumnType("float");
-
-                    b.Property<int>("ImagesId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("LastWatering")
                         .HasColumnType("datetime2");
@@ -133,9 +127,6 @@ namespace GardenHelperWebAPI.Migrations
                     b.Property<double>("SoilPH")
                         .HasColumnType("float");
 
-                    b.Property<int>("SpecificationsId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("GardenerId");
@@ -147,19 +138,16 @@ namespace GardenHelperWebAPI.Migrations
                         {
                             Id = 1,
                             AmountHarvested = 0.0,
+                            CommonName = "",
                             DateHarvested = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1988),
                             DatePlanted = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989),
-                            DistributionId = 1,
                             GardenerId = 1,
-                            GrowthId = 1,
                             HealthStatus = "",
                             Height = 0.0,
-                            ImagesId = 1,
                             LastWatering = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989),
                             Light = 10.0,
                             SoilMoisture = 0.0,
-                            SoilPH = 7.0,
-                            SpecificationsId = 1
+                            SoilPH = 7.0
                         });
                 });
 

@@ -49,10 +49,17 @@ namespace GardenHelperWebAPI.Controllers
         }
 
        
-        [HttpPost]
+        [HttpPost("post-plant")]
         public IActionResult Post([FromBody] Plant value)
         {
             _context.Plants.Add(value);
+            _context.SaveChanges();
+            return Ok();
+        }
+        [HttpPost("post-gardener")]
+        public IActionResult Post([FromBody] Gardener value)
+        {
+            _context.Gardeners.Add(value);
             _context.SaveChanges();
             return Ok();
         }

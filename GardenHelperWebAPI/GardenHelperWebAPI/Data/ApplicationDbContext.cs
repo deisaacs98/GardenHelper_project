@@ -34,10 +34,7 @@ namespace GardenHelperWebAPI.Data
             );
             modelBuilder.Entity<Plant>().HasData(
                 new Plant { Id=1, 
-                    GrowthId=1,
-                    SpecificationsId=1,
-                    ImagesId=1, 
-                    DistributionId=1,
+                    CommonName="",
                     DatePlanted=new System.DateTime(2020-3-28),
                     DateHarvested = new System.DateTime(2020 - 3 - 29),
                     LastWatering = new System.DateTime(2020 - 3 - 28),

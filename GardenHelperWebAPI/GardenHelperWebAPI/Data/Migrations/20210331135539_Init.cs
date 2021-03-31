@@ -37,10 +37,7 @@ namespace GardenHelperWebAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    GrowthId = table.Column<int>(nullable: false),
-                    SpecificationsId = table.Column<int>(nullable: false),
-                    ImagesId = table.Column<int>(nullable: false),
-                    DistributionId = table.Column<int>(nullable: false),
+                    CommonName = table.Column<string>(nullable: true),
                     DatePlanted = table.Column<DateTime>(nullable: false),
                     DateHarvested = table.Column<DateTime>(nullable: false),
                     LastWatering = table.Column<DateTime>(nullable: false),
@@ -70,8 +67,8 @@ namespace GardenHelperWebAPI.Migrations
 
             migrationBuilder.InsertData(
                 table: "Plants",
-                columns: new[] { "Id", "AmountHarvested", "DateHarvested", "DatePlanted", "DistributionId", "GardenerId", "GrowthId", "HealthStatus", "Height", "ImagesId", "LastWatering", "Light", "SoilMoisture", "SoilPH", "SpecificationsId" },
-                values: new object[] { 1, 0.0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1988), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 1, 1, 1, "", 0.0, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 10.0, 0.0, 7.0, 1 });
+                columns: new[] { "Id", "AmountHarvested", "CommonName", "DateHarvested", "DatePlanted", "GardenerId", "HealthStatus", "Height", "LastWatering", "Light", "SoilMoisture", "SoilPH" },
+                values: new object[] { 1, 0.0, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1988), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 1, "", 0.0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989), 10.0, 0.0, 7.0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Plants_GardenerId",
