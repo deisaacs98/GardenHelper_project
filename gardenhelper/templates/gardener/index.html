@@ -39,11 +39,6 @@
                             {% endfor %}
                             <td>
                                 <a class="action" href="{{plant['id']}}/update">Update</a>
-                                <form method="post">
-                                    <input name="plant_id" id="plant_id" type="hidden"
-                                           value="{{ plant[Id]}}">
-                                    <input type="submit" value="Update">
-                                </form>
                             </td>
                         </tr>
                         {% endfor %}

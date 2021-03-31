@@ -106,7 +106,7 @@ def update(plant_id):
                  'DateHarvested': date_harvested, 'LastWatering': last_watering, 'HealthStatus': health_status,
                  'SoilPH': soil_ph, 'Light': light, 'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested,
                  'GardenerId': gardener_id}
-        response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
+        response = requests.put('https://localhost:44325/api/plant/update-plant', json=plant, verify=False)
         print(response.content)
         #datePlanted = request.form['date_planted']
         #dateHarvested = request.form['date_harvested']
@@ -135,7 +135,7 @@ def update(plant_id):
             #db.commit()
             #return redirect(url_for('plant.index'))
 
-    return render_template('gardener/edit.html', plant_id=plant_id)
+    return render_template('gardener/update.html', plant_id=plant_id)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -160,6 +160,7 @@ def search_name():
                                columns=columns)
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
         gardener.found_plant = True
+        gardener.first_search = True
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
                                 f'{common_name}')

@@ -64,7 +64,7 @@ namespace GardenHelperWebAPI.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("update-plant")]
         public IActionResult Put([FromBody] Plant plant)
         {
             _context.Plants.Update(plant);
