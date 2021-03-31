@@ -18,22 +18,22 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-                <table border="1">
+                <table>
                     <thead>
                         <tr>
-                            <th></th>
-                            {% for column in columns %}
-                            <th>{{ column }}</th>
-                            {% endfor %}
+                            <th>Common Name</th>
+                            <th>Date Planted</th>
+                            <th>Last Watering</th>
+                            <th>Health Status</th>
+                            <th>Soil pH</th>
+                            <th>Light</th>
+                            <th>Soil Moisture</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for plant in garden%}
                         <tr>
-                            <td>
-
-                            </td>
                             {% for column in columns %}
                             <td>{{ plant[column] }}</td>
                             {% endfor %}

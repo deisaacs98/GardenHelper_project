@@ -24,8 +24,8 @@ def index():
     user_id = session.get('user_id')
     response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
     plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
-    columns = ["commonName", "datePlanted", "dateHarvested", "lastWatering", "healthStatus", "height", "soilPH",
-               "light", "soilMoisture", "amountHarvested"]
+    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
+               "light", "soilMoisture"]
     return render_template('gardener/index.html', garden=plants, columns=columns)
 
 
@@ -160,7 +160,6 @@ def search_name():
                                columns=columns)
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
         gardener.found_plant = True
-        gardener.first_search = True
         common_name = request.form['common_name']
         response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
                                 f'{common_name}')
@@ -170,7 +169,7 @@ def search_name():
                                search_results=search_results, columns=columns)
     elif request.method == 'POST' and not gardener.first_search and gardener.found_plant:
         gardener.first_search = True
-        gardener.found_plant = True
+        gardener.found_plant = False
         common_name = request.form['common_name']
         user_id = session.get('user_id')
         plant = {'CommonName': common_name, 'GardenerId': user_id}
@@ -182,10 +181,6 @@ def search_name():
         #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         #columns = ["common_name", "scientific_name", "family_common_name", "family"]
         return redirect(url_for('gardener.index'))
-    elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
-        plant_id = request.form['plant_id']
-        return redirect(url_for('gardener.update', plant_id=plant_id))
-
     else:
         gardener.first_search = True
         return render_template('gardener/search.html')
