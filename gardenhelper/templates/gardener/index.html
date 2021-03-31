@@ -8,5 +8,49 @@
 {% endblock %}
 
 {% block content %}
-  {{garden}}
+   {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+<br>
+<br>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for column in columns %}
+                            <th>{{ column }}</th>
+                            {% endfor %}
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plant in garden%}
+                        <tr>
+                            <td>
+
+                            </td>
+                            {% for column in columns %}
+                            <td>{{ plant[column] }}</td>
+                            {% endfor %}
+                            <td>
+                                <a class="action" href="{{plant['id']}}/update">Update</a>
+                                <form method="post">
+                                    <input name="plant_id" id="plant_id" type="hidden"
+                                           value="{{ plant[Id]}}">
+                                    <input type="submit" value="Update">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,7 +1,8 @@
 import json
 from types import SimpleNamespace
 import requests
-from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response, session
+from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response, session, \
+    app
 from .auth import login_required
 from .auth import load_logged_in_user
 from .db import get_db
@@ -22,10 +23,10 @@ bp = Blueprint('gardener', __name__)
 def index():
     user_id = session.get('user_id')
     response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
-    print(response.content)
-    #plants = Plant.plant_decoder(json.loads(response.content,object_hook=lambda d: SimpleNamespace(**d)))
     plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
-    return render_template('gardener/index.html', garden=plants)
+    columns = ["commonName", "datePlanted", "dateHarvested", "lastWatering", "healthStatus", "height", "soilPH",
+               "light", "soilMoisture", "amountHarvested"]
+    return render_template('gardener/index.html', garden=plants, columns=columns)
 
 
 @ bp.route('/create', methods=('GET', 'POST'))
@@ -81,25 +82,17 @@ def create():
 ###The login database is still necessary because it is the most practical way to have user accounts.
 ###I just think it would be wise to store the heavy data in the REST API.
 @login_required
-def get_plant(id, check_gardener=True):
-    garden = pd.DataFrame(plants)
-    plant = garden[garden["GardenerId"] == id]
-
-    #if plant is None:
-        #abort(404, "Plant id {0} doesn't exist.".format(id))
-
-    #if check_gardener and plant['gardener_id'] != g.user['id']:
-        #abort(403)
-
+def get_plant(plant_id, check_gardener=True):
+    user_id = session.get('user_id')
+    response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
+    plant = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
     return plant
 
 
-@ bp.route('/<int:id>/update', methods=('GET', 'POST'))
-@ login_required
-def update(id):
-    plant = get_plant(id)
-
+@ bp.route('/<int:plant_id>/update', methods=('GET', 'POST'))
+def update(plant_id):
     if request.method == 'POST':
+        common_name = request.form['common_name']
         date_planted = request.form['date_planted']
         date_harvested = request.form['date_harvested']
         last_watering = request.form['last_watering']
@@ -108,26 +101,41 @@ def update(id):
         light = request.form['light']
         soil_moisture = request.form['soil_moisture']
         amount_harvested = request.form['amount_harvested']
-        error = None
+        gardener_id = session.get('user_id')
+        plant = {'Id': plant_id, 'CommonName': common_name, 'DatePlanted': date_planted,
+                 'DateHarvested': date_harvested, 'LastWatering': last_watering, 'HealthStatus': health_status,
+                 'SoilPH': soil_ph, 'Light': light, 'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested,
+                 'GardenerId': gardener_id}
+        response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
+        print(response.content)
+        #datePlanted = request.form['date_planted']
+        #dateHarvested = request.form['date_harvested']
+        #lastWatering = request.form['last_watering']
+        #healthStatus = request.form['health_status']
+        #soilPH = request.form['soil_ph']
+        #light = request.form['light']
+        #soilMoisture = request.form['soil_moisture']
+        #amountHarvested = request.form['amount_harvested']
+        #error = None
 
-        if not date_planted:
-            error = 'Date Planted is required.'
+        #if not datePlanted:
+            #error = 'Date Planted is required.'
 
-        if error is not None:
-            flash(error)
-        else:
-            db = get_db()
-            db.execute(
-                'UPDATE post SET date_planted = ?, date_harvested = ?, last_watering = ?, health_status = ?, '
-                'soil_ph = ?, light = ?, soil_moisture = ?, amount_harvested = ? ' 
-                ' WHERE id = ?',
-                (date_planted, date_harvested, last_watering, health_status, soil_ph, light, soil_moisture,
-                 amount_harvested, id)
-            )
-            db.commit()
-            return redirect(url_for('plant.index'))
+        #if error is not None:
+            #flash(error)
+        #else:
+            #db = get_db()
+            #db.execute(
+                #'UPDATE post SET date_planted = ?, date_harvested = ?, last_watering = ?, health_status = ?, '
+                #'soil_ph = ?, light = ?, soil_moisture = ?, amount_harvested = ? '
+                #' WHERE id = ?',
+                #(date_planted, date_harvested, last_watering, health_status, soil_ph, light, soil_moisture,
+                 #amount_harvested, id)
+            #)
+            #db.commit()
+            #return redirect(url_for('plant.index'))
 
-    return render_template('plant/update.html', plant=plant)
+    return render_template('gardener/edit.html', plant_id=plant_id)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -138,9 +146,6 @@ def delete(id):
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
     return redirect(url_for('plant.index'))
-
-
-
 
 
 @bp.route('/search', methods=['GET', 'POST'])
@@ -164,7 +169,7 @@ def search_name():
                                search_results=search_results, columns=columns)
     elif request.method == 'POST' and not gardener.first_search and gardener.found_plant:
         gardener.first_search = True
-        gardener.found_plant = False
+        gardener.found_plant = True
         common_name = request.form['common_name']
         user_id = session.get('user_id')
         plant = {'CommonName': common_name, 'GardenerId': user_id}
@@ -176,6 +181,10 @@ def search_name():
         #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         #columns = ["common_name", "scientific_name", "family_common_name", "family"]
         return redirect(url_for('gardener.index'))
+    elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
+        plant_id = request.form['plant_id']
+        return redirect(url_for('gardener.update', plant_id=plant_id))
+
     else:
         gardener.first_search = True
         return render_template('gardener/search.html')
