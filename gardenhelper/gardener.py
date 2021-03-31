@@ -167,7 +167,7 @@ def search_name():
         gardener.found_plant = False
         common_name = request.form['common_name']
         user_id = session.get('user_id')
-        plant = {'commonName': common_name, 'GardenerId': user_id}
+        plant = {'CommonName': common_name, 'GardenerId': user_id}
         response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
         print(response.content)
 
