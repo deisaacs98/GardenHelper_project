@@ -1,5 +1,6 @@
 import functools
 
+import requests
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -40,7 +41,24 @@ def register():
             ).fetchone()
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('gardener.create'))
+            first_name = request.form['first_name']
+            middle_initial = request.form['middle_initial']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            address_line1 = request.form['address_line1']
+            address_line2 = request.form['address_line2']
+            city = request.form['city']
+            state = request.form['state']
+            zip_code = request.form['zip_code']
+            phone = request.form['phone']
+            gardener_data = {'Id': user['id'], 'FirstName': first_name, 'MiddleInitial': middle_initial,
+                             'LastName': last_name, 'Email': email, 'AddressLine1': address_line1,
+                             'AddressLine2': address_line2, 'City': city, 'State': state, 'Zip': zip_code,
+                             'Phone': phone}
+            response = requests.post('https://localhost:44325/api/plant/post-gardener', json=gardener_data,
+                                     verify=False)
+            print(response.content)
+            return redirect(url_for('gardener.index'))
 
         flash(error)
 
@@ -52,6 +70,16 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        first_name = request.form['first_name']
+        middle_initial = request.form['middle_initial']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip = request.form['zip']
+        phone = request.form['phone']
         db = get_db()
         error = None
         user = db.execute(

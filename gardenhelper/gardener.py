@@ -75,12 +75,6 @@ def create():
     return render_template('gardener/create.html')
 
 
-###Modified code from Flask tutorial, but will need to get plant by id. SQL query needs to be evaluated, probably will
-###use Pandas/NumPy/SkLearn here...
-###Also, thinking I need to use REST API instead of local username database...
-###
-###The login database is still necessary because it is the most practical way to have user accounts.
-###I just think it would be wise to store the heavy data in the REST API.
 @login_required
 def get_plant(plant_id, check_gardener=True):
     user_id = session.get('user_id')
@@ -89,6 +83,7 @@ def get_plant(plant_id, check_gardener=True):
     return plant
 
 
+@login_required
 @ bp.route('/<int:plant_id>/update', methods=('GET', 'POST'))
 def update(plant_id):
     if request.method == 'POST':
@@ -97,6 +92,7 @@ def update(plant_id):
         date_harvested = request.form['date_harvested']
         last_watering = request.form['last_watering']
         health_status = request.form['health_status']
+        height = request.form['height']
         soil_ph = request.form['soil_ph']
         light = request.form['light']
         soil_moisture = request.form['soil_moisture']
@@ -104,38 +100,16 @@ def update(plant_id):
         gardener_id = session.get('user_id')
         plant = {'Id': plant_id, 'CommonName': common_name, 'DatePlanted': date_planted,
                  'DateHarvested': date_harvested, 'LastWatering': last_watering, 'HealthStatus': health_status,
-                 'SoilPH': soil_ph, 'Light': light, 'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested,
-                 'GardenerId': gardener_id}
-        response = requests.put('https://localhost:44325/api/plant/update-plant', json=plant, verify=False)
+                 'Height': height, 'SoilPH': soil_ph, 'Light': light, 'SoilMoisture': soil_moisture,
+                 'AmountHarvested': amount_harvested, 'GardenerId': gardener_id}
+        response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
         print(response.content)
-        #datePlanted = request.form['date_planted']
-        #dateHarvested = request.form['date_harvested']
-        #lastWatering = request.form['last_watering']
-        #healthStatus = request.form['health_status']
-        #soilPH = request.form['soil_ph']
-        #light = request.form['light']
-        #soilMoisture = request.form['soil_moisture']
-        #amountHarvested = request.form['amount_harvested']
-        #error = None
-
-        #if not datePlanted:
-            #error = 'Date Planted is required.'
-
-        #if error is not None:
-            #flash(error)
-        #else:
-            #db = get_db()
-            #db.execute(
-                #'UPDATE post SET date_planted = ?, date_harvested = ?, last_watering = ?, health_status = ?, '
-                #'soil_ph = ?, light = ?, soil_moisture = ?, amount_harvested = ? '
-                #' WHERE id = ?',
-                #(date_planted, date_harvested, last_watering, health_status, soil_ph, light, soil_moisture,
-                 #amount_harvested, id)
-            #)
-            #db.commit()
-            #return redirect(url_for('plant.index'))
-
-    return render_template('gardener/update.html', plant_id=plant_id)
+        return redirect(url_for('gardener.index'))
+    else:
+        user_id = session.get('user_id')
+        response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
+        plant = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+    return render_template('gardener/update.html', plant_id=plant_id, plant=plant)
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
