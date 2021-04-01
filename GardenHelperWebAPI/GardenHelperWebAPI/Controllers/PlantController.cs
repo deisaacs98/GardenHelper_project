@@ -33,13 +33,13 @@ namespace GardenHelperWebAPI.Controllers
             var plant = _context.Plants.Where(m => m.GardenerId == gardener_id);
             return Ok(plant);
         }
-        // GET Gardener Details
-        [HttpGet("gardener={gardener_id}")]
-        public IActionResult GetGardener(int gardener_id)
-        {
-            var gardener = _context.Gardeners.Where(m => m.Id == gardener_id);
-            return Ok(gardener);
-        }
+        //// GET Gardener Details
+        //[HttpGet("gardener={gardener_id}")]
+        //public IActionResult GetGardener(int gardener_id)
+        //{
+        //    var gardener = _context.Gardeners.Where(m => m.Id == gardener_id);
+        //    return Ok(gardener);
+        //}
 
         [HttpGet("gardener={gardener_id}/plant={id}")]
         public IActionResult Get(int id, int gardener_id)
@@ -56,13 +56,13 @@ namespace GardenHelperWebAPI.Controllers
             _context.SaveChanges();
             return Ok();
         }
-        [HttpPost("post-gardener")]
-        public IActionResult Post([FromBody] Gardener value)
-        {
-            _context.Gardeners.Add(value);
-            _context.SaveChanges();
-            return Ok();
-        }
+        //[HttpPost("post-gardener")]
+        //public IActionResult Post([FromBody] Gardener value)
+        //{
+        //    _context.Gardeners.Add(value);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
 
         [HttpPut]
         public IActionResult Put([FromBody] Plant plant)

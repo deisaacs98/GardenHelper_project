@@ -29,52 +29,6 @@ def index():
     return render_template('gardener/index.html', garden=plants, columns=columns)
 
 
-@ bp.route('/create', methods=('GET', 'POST'))
-@ login_required
-def create():
-    user = load_logged_in_user
-    if request.method == 'POST':
-
-        Id = user.id
-        FirstName = request.form['first_name']
-        MiddleInitial = request.form['middle_initial']
-        LastName = request.form['last_name']
-        Email = request.form['email']
-        AddressLine1 = request.form['address_line1']
-        AddressLine2 = request.form['address_line2']
-        City = request.form['city']
-        State = request.form['state']
-        Zip = request.form['zip']
-        Phone = request.form['phone']
-        error = None
-
-        if not FirstName:
-            error = 'First name is required.'
-        if not LastName:
-            error = 'Last name is required.'
-        if not Email:
-            error = 'Email address is required.'
-        if not AddressLine1:
-            error = 'Address is required.'
-        if not City:
-            error = 'City is required.'
-        if not State:
-            error = 'State is required.'
-        if not Zip:
-            error = 'Zip code is required.'
-        if not Phone:
-            error = 'Phone number is required.'
-        if error is not None:
-            flash(error)
-        else:
-            ###Add gardener to database.
-            ##Need to geocode address here.
-            requests.post('https://localhost:44325/api/plant/', verify=False)
-            return redirect(url_for('gardener.index'))
-
-    return render_template('gardener/create.html')
-
-
 @login_required
 def get_plant(plant_id, check_gardener=True):
     user_id = session.get('user_id')

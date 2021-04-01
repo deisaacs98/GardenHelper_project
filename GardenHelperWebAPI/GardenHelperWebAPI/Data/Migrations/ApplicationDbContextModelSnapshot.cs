@@ -19,72 +19,6 @@ namespace GardenHelperWebAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("GardenHelperWebAPI.Models.Gardener", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AddressLine1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Lat")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lng")
-                        .HasColumnType("float");
-
-                    b.Property<string>("MiddleInitial")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Zip")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Gardeners");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddressLine1 = "",
-                            AddressLine2 = "",
-                            City = "",
-                            Email = "",
-                            FirstName = "John",
-                            LastName = "Gardener",
-                            Lat = 0.0,
-                            Lng = 0.0,
-                            MiddleInitial = "J",
-                            Phone = 0,
-                            State = "",
-                            Zip = 90210
-                        });
-                });
-
             modelBuilder.Entity("GardenHelperWebAPI.Models.Plant", b =>
                 {
                     b.Property<int>("Id")
@@ -113,6 +47,9 @@ namespace GardenHelperWebAPI.Migrations
                     b.Property<double>("Height")
                         .HasColumnType("float");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("LastWatering")
                         .HasColumnType("datetime2");
 
@@ -125,6 +62,9 @@ namespace GardenHelperWebAPI.Migrations
                     b.Property<double>("SoilPH")
                         .HasColumnType("float");
 
+                    b.Property<int>("SpeciesId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Plants");
@@ -134,16 +74,18 @@ namespace GardenHelperWebAPI.Migrations
                         {
                             Id = 1,
                             AmountHarvested = 0.0,
-                            CommonName = "",
+                            CommonName = "European mountain ash",
                             DateHarvested = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1988),
                             DatePlanted = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989),
                             GardenerId = 1,
                             HealthStatus = "",
                             Height = 0.0,
+                            ImageUrl = "https://bs.floristic.org/image/o/63073d2fbf45b90701279405ecc2eec0272906ed",
                             LastWatering = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified).AddTicks(1989),
                             Light = 10.0,
                             SoilMoisture = 0.0,
-                            SoilPH = 7.0
+                            SoilPH = 7.0,
+                            SpeciesId = 183086
                         });
                 });
 #pragma warning restore 612, 618

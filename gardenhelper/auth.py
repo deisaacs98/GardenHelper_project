@@ -1,4 +1,6 @@
 import functools
+import json
+from types import SimpleNamespace
 
 import requests
 from flask import (
@@ -9,6 +11,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from gardenhelper import gardener
 from gardenhelper.db import get_db
 from gardenhelper import gardener
+from gardenhelper import api_keys
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -18,6 +21,25 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        first_name = request.form['first_name']
+        middle_initial = request.form['middle_initial']
+        last_name = request.form['last_name']
+        address_line1 = request.form['address_line1']
+        address_line2 = request.form['address_line2']
+        city = request.form['city']
+        state = request.form['state']
+        zip_code = request.form['zip_code']
+        email = request.form['email']
+        phone = request.form['phone']
+        geo_response = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={address_line1}+'
+                                    f'{address_line2},+{city},+{state}+{zip_code}&key={api_keys.geocoding_key}')
+        lat_lng = json.loads(geo_response.content)
+        res = lat_lng["results"]
+        geo = res[0]["geometry"]["location"]
+        lat = geo["lat"]
+        lng = geo["lng"]
+        print(lat)
+        print(lng)
         db = get_db()
         error = None
 
@@ -25,6 +47,22 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not first_name:
+            error = 'First name is required.'
+        elif not last_name:
+            error = 'Last name is required.'
+        elif not address_line1:
+            error = 'Address is required.'
+        elif not city:
+            error = 'City is required.'
+        elif not state:
+            error = 'State is required.'
+        elif not zip_code:
+            error = 'Zip code is required.'
+        elif not email:
+            error = 'Email address is required.'
+        elif not phone:
+            error = 'Phone number is required.'
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
@@ -32,8 +70,11 @@ def register():
 
         if error is None:
             db.execute(
-                'INSERT INTO user (username, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO user (username, password, first_name, middle_initial, last_name, address_line1, '
+                'address_line2, city, state, zip_code, email, phone, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
+                '?, ?, ?, ?)',
+                (username, generate_password_hash(password), first_name, middle_initial, last_name, address_line1,
+                 address_line2, city, state, zip_code, email, phone, lat, lng)
             )
             db.commit()
             user = db.execute(
@@ -41,23 +82,14 @@ def register():
             ).fetchone()
             session.clear()
             session['user_id'] = user['id']
-            first_name = request.form['first_name']
-            middle_initial = request.form['middle_initial']
-            last_name = request.form['last_name']
-            email = request.form['email']
-            address_line1 = request.form['address_line1']
-            address_line2 = request.form['address_line2']
-            city = request.form['city']
-            state = request.form['state']
-            zip_code = request.form['zip_code']
-            phone = request.form['phone']
-            gardener_data = {'Id': user['id'], 'FirstName': first_name, 'MiddleInitial': middle_initial,
-                             'LastName': last_name, 'Email': email, 'AddressLine1': address_line1,
-                             'AddressLine2': address_line2, 'City': city, 'State': state, 'Zip': zip_code,
-                             'Phone': phone}
-            response = requests.post('https://localhost:44325/api/plant/post-gardener', json=gardener_data,
-                                     verify=False)
-            print(response.content)
+
+            #gardener_data = {'UserId': user['id'], 'FirstName': first_name, 'MiddleInitial': middle_initial,
+            #                 'LastName': last_name, 'Email': email, 'AddressLine1': address_line1,
+            #                 'AddressLine2': address_line2, 'City': city, 'State': state, 'Zip': zip_code,
+            #                 'Phone': phone, 'Lat': lat, 'Lng': lng}
+            #response = requests.post('https://localhost:44325/api/plant/post-gardener', json=gardener_data,
+            #                         verify=False)
+            #print(response.content)
             return redirect(url_for('gardener.index'))
 
         flash(error)

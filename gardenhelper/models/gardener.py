@@ -33,11 +33,11 @@ class Gardener:
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-user = load_logged_in_user
-response = requests.get('https://localhost:44325/api/plant/gardener={user.id}', verify=False)
-gardeners = pd.read_json(response.content)
-first_search = True
-found_plant = False
+#user = load_logged_in_user
+#response = requests.get('https://localhost:44325/api/plant/gardener={user.id}', verify=False)
+#gardeners = pd.read_json(response.content)
+#first_search = True
+#found_plant = False
 #print(gardeners)
 
 #json_data_dict = json.loads(response)

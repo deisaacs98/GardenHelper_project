@@ -14,28 +14,12 @@ namespace GardenHelperWebAPI.Data
         {
             base.OnModelCreating(modelBuilder);
             // Seed data - needs migration
-            modelBuilder.Entity<Gardener>().HasData(
-                new Gardener
-                {
-                    Id = 1,
-                    FirstName = "John",
-                    MiddleInitial = "J",
-                    LastName = "Gardener",
-                    AddressLine1 = "",
-                    AddressLine2 = "",
-                    City = "",
-                    State = "",
-                    Zip = 90210,
-                    Email = "",
-                    Phone = 0,
-                    Lat = 0,
-                    Lng = 0
-                }
-            );
             modelBuilder.Entity<Plant>().HasData(
                 new Plant { Id=1, 
-                    CommonName="",
-                    DatePlanted=new System.DateTime(2020-3-28),
+                    SpeciesId= 183086,
+                    CommonName = "European mountain ash",
+                    ImageUrl= "https://bs.floristic.org/image/o/63073d2fbf45b90701279405ecc2eec0272906ed",
+                    DatePlanted =new System.DateTime(2020-3-28),
                     DateHarvested = new System.DateTime(2020 - 3 - 29),
                     LastWatering = new System.DateTime(2020 - 3 - 28),
                     HealthStatus="", 
@@ -47,8 +31,6 @@ namespace GardenHelperWebAPI.Data
                 }
             );
         }
-
-        public DbSet<Gardener> Gardeners { get; set; }
         public DbSet<Plant> Plants { get; set; }
     }
 }
