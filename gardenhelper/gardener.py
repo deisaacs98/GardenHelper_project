@@ -41,29 +41,32 @@ def get_plant(plant_id, check_gardener=True):
 @ bp.route('/<int:plant_id>/update', methods=('GET', 'POST'))
 def update(plant_id):
     if request.method == 'POST':
+        species_id = np.double(request.form['species_id'])
         common_name = request.form['common_name']
-        date_planted = request.form['date_planted']
-        date_harvested = request.form['date_harvested']
-        last_watering = request.form['last_watering']
+        image_url = request.form['image_url']
+        gardener_id = int(request.form['gardener_id'])
+        date_planted = str(request.form['date_planted'])
+        date_harvested = str(request.form['date_harvested'])
+        last_watering = str(request.form['last_watering'])
         health_status = request.form['health_status']
-        height = request.form['height']
-        soil_ph = request.form['soil_ph']
-        light = request.form['light']
-        soil_moisture = request.form['soil_moisture']
-        amount_harvested = request.form['amount_harvested']
-        gardener_id = session.get('user_id')
-        plant = {'Id': plant_id, 'CommonName': common_name, 'DatePlanted': date_planted,
-                 'DateHarvested': date_harvested, 'LastWatering': last_watering, 'HealthStatus': health_status,
-                 'Height': height, 'SoilPH': soil_ph, 'Light': light, 'SoilMoisture': soil_moisture,
-                 'AmountHarvested': amount_harvested, 'GardenerId': gardener_id}
+        height = np.double(request.form['height'])
+        soil_ph = np.double(request.form['soil_ph'])
+        light = np.double(request.form['light'])
+        soil_moisture = np.double(request.form['soil_moisture'])
+        amount_harvested = np.double(request.form['amount_harvested'])
+        plant = {'Id': plant_id, 'SpeciesId': species_id, 'CommonName': common_name, 'ImageUrl': image_url,
+                 'DatePlanted': date_planted, 'DateHarvested': date_harvested, 'LastWatering': last_watering,
+                 'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph, 'Light': light,
+                 'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested, 'GardenerId': gardener_id}
         response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
         print(response.content)
         return redirect(url_for('gardener.index'))
     else:
         user_id = session.get('user_id')
         response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
-        plant = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
-    return render_template('gardener/update.html', plant_id=plant_id, plant=plant)
+        plant = json.loads(response.content)
+    return render_template('gardener/update.html', plant_id=plant_id, plant=plant, species_id=int(plant[0]["speciesId"]),
+                           gardener_id=int(plant[0]["gardenerId"]))
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -100,9 +103,9 @@ def search_name():
         gardener.found_plant = False
         common_name = request.form['common_name']
         image_url = request.form['image_url']
-        species_id = request.form['species_id']
+        species_id = np.double(request.form['species_id'])
         user_id = session.get('user_id')
-        plant = {'CommonName': common_name, 'SpeciesId': int(species_id), 'ImageUrl': image_url,  'GardenerId': user_id}
+        plant = {'CommonName': common_name, 'SpeciesId': species_id, 'ImageUrl': image_url,  'GardenerId': user_id}
         response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
         print(response.content)
 

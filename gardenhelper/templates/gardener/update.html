@@ -16,27 +16,28 @@
             <div class="card-body">
                 <form method="post">
                     <div class="row">
-                        <label for="common_name"class="col-sm-2 col-form-label">Common Name </label>
-                        <div class="col-sm-8">
-                            <input name="common_name" id="common_name" value="{{ request.form['commonName'] }}">
-                        </div>
-                    </div>
-                    <div class="row">
+                        <input name="species_id" id="species_id" type="hidden" value="{{ species_id}}">
+                        <input name="common_name" id="common_name" type="hidden" value="{{ plant['commonName']}}">
+                        <input name="image_url" id="image_url" type="hidden" value="{{ plant['imageUrl']}}">
+                        <input name="gardener_id" id="gardener_id" type="hidden" value="{{ gardener_id}}">
                         <label for="date_planted" class="col-sm-2 col-form-label">Date Planted</label>
                         <div class="col-sm-8">
-                            <input name="date_planted" id="date_planted" value="{{ request.form['datePlanted'] }}">
+                            <input name="date_planted" type="datetime-local" id="date_planted"
+                                   value="{{ request.form['datePlanted'] }}">
                         </div>
                     </div>
                     <div class="row">
                         <label for="date_harvested" class="col-sm-2 col-form-label">Date Harvested</label>
                         <div class="col-sm-8">
-                            <input name="date_harvested" id="date_harvested" value="{{ request.form['date_harvested'] }}">
+                            <input name="date_harvested" type="datetime-local" id="date_harvested"
+                                   value="{{ request.form['date_harvested'] }}">
                         </div>
                     </div>
                     <div class="row">
                         <label for="last_watering" class="col-sm-2 col-form-label">Last Watering</label>
                         <div class="col-sm-8">
-                            <input name="last_watering" id="last_watering" value="{{ request.form['lastWatering'] }}">
+                            <input name="last_watering" type="datetime-local" id="last_watering"
+                                   value="{{ request.form['lastWatering'] }}">
                         </div>
                     </div>
                     <div class="row">
