@@ -1,14 +1,10 @@
 {% extends 'base.html' %}
 
-{% block header %}
-  <h1>{% block title %}Plants{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="search">Search for Plants to Add</a>
-  {% endif %}
-{% endblock %}
+
+
 
 {% block content %}
-   {% if error %}
+ {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
 <br>
@@ -21,25 +17,28 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Common Name</th>
-                            <th>Date Planted</th>
-                            <th>Last Watering</th>
-                            <th>Health Status</th>
-                            <th>Height</th>
-                            <th>Soil pH</th>
-                            <th>Light</th>
-                            <th>Soil Moisture</th>
+                            <th></th>
+                            {% for column in columns %}
+                            <th>{{ column }}</th>
+                            {% endfor %}
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for plant in garden%}
+                        {% for result in search_results%}
                         <tr>
+                            <td>
+                                <img src={{result["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            </td>
                             {% for column in columns %}
-                            <td>{{ plant[column] }}</td>
+                            <td>{{ result[column] }}</td>
                             {% endfor %}
                             <td>
-                                <a class="action" href="{{plant['id']}}/update">Update</a>
+                                <form method="post">
+                                    <input name="common_name"  type="hidden"
+                                           id="common_name" value="{{ result['common_name']}}">
+                                    <input type="submit" value="Add to Garden">
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
@@ -47,6 +46,8 @@
                 </table>
             </div>
         </div>
+
     </div>
 </div>
+
 {% endblock %}

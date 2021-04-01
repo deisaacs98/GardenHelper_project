@@ -1,0 +1,28 @@
+html {
+    box-sizing: border-box;
+    font-family: Garamond;
+    background-color:  #dfd2b8;
+    color: #1F0A0E;
+
+}
+body {
+    font-family: Garamond;
+    background-color:  #dfd2b8;
+
+}
+.navbar {
+    font-family: Garamond;
+    background-color: #909580;
+}
+.card-body {
+    background-color: #dfd2b8;
+    color: #1F0A0E;
+
+}
+.card-footer{
+    background-color: #0C120C;
+
+}
+.card-link{
+    color:#28A745;
+}

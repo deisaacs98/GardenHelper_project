@@ -11,13 +11,41 @@
 <br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-3">
+    <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {% for column in columns %}
+                            <th>{{ column }}</th>
+                            {% endfor %}
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in search_results%}
+                        <tr>
+                            <td>
+                                <img src={{result["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            </td>
+                            {% for column in columns %}
+                            <td>{{ result[column] }}</td>
+                            {% endfor %}
+                            <td>
+                                <form method="post">
+                                    <input name="common_name" id="common_name" type="hidden"
+                                           value="{{ result['common_name']}}">
+                                    <input type="submit" value="View Details">
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
 </div>
 

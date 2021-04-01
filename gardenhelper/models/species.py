@@ -1,6 +1,8 @@
 import json
 import requests
 from types import SimpleNamespace
+import pandas as pd
+from gardenhelper.api_keys import trefle_token
 
 
 class Species:
@@ -29,18 +31,15 @@ class Species:
     @staticmethod
     def species_decoder(obj):
         return Species(obj['_id'], obj['_growth_id'], obj['_distribution_id'],  obj['_specifications_id'],
-                       obj['_images_id'], obj['_images_url'], obj['common_name'],obj['_scientific_name'],
+                       obj['_images_id'], obj['_images_url'], obj['common_name'], obj['_scientific_name'],
                        obj['_status'],  obj['_rank'], obj['_family_common_name'], obj['_family'], obj['_genus_id'],
                        obj['_genus'], obj['_edible_part'], obj['_edible'], obj['_vegetable'], obj['_observations'])
 
 
 ##Not sure what I will be putting in here at the moment.
 ##Leaving framework for reference.
-#response = requests.get('put REST API url here')
 
-#json_data_dict = json.loads(response)
 
-#gardeners = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
 
 
 ###gardeners = gerdener.gardener_decoder(json_data_dict)
