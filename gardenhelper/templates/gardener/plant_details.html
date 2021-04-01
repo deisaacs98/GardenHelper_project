@@ -37,6 +37,9 @@
                                 <form method="post">
                                     <input name="common_name"  type="hidden"
                                            id="common_name" value="{{ result['common_name']}}">
+                                    <input name="image_url" id="image_url" type="hidden"
+                                           value="{{ result['image_url']}}">
+                                    <input name="species_id" id="species_id" type="hidden" value="{{result['id']}}">
                                     <input type="submit" value="Add to Garden">
                                 </form>
                             </td>

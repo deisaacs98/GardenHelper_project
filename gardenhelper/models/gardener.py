@@ -5,6 +5,7 @@ import pandas as pd
 from gardenhelper.auth import login_required
 from gardenhelper.auth import load_logged_in_user
 
+##Model is not necessary at this point, but leaving in case it is useful later.
 class Gardener:
 
     def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1, _address_line2, _city,
@@ -31,22 +32,5 @@ class Gardener:
                         obj['_zip'], obj['_phone'], obj['_lat'], obj['_lng'])
 
 
-##Not sure what I will be putting in here at the moment.
-##Leaving framework for reference.
-#user = load_logged_in_user
-#response = requests.get('https://localhost:44325/api/plant/gardener={user.id}', verify=False)
-#gardeners = pd.read_json(response.content)
-#first_search = True
-#found_plant = False
-#print(gardeners)
-
-#json_data_dict = json.loads(response)
-
-#gardeners = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
-#response = requests.get('https://localhost:44325/api/gardener/{id}')
-
-###gardeners = gardener.gardener_decoder(json_data_dict)
-#response = requests.get('https://trefle.io/api/v1/plants/search?token=')
-
-#json_data_dict = json.loads(response)
-#plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+first_search = True
+found_plant = False

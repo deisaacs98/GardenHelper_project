@@ -15,12 +15,13 @@
 <br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-5">
+    <div class="col-md-10">
         <div class="card">
             <div class="card-body">
                 <table>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Common Name</th>
                             <th>Date Planted</th>
                             <th>Last Watering</th>
@@ -35,6 +36,9 @@
                     <tbody>
                         {% for plant in garden%}
                         <tr>
+                            <td>
+                                <img src={{plant["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            </td>
                             {% for column in columns %}
                             <td>{{ plant[column] }}</td>
                             {% endfor %}
