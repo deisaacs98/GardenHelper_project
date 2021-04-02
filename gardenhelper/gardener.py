@@ -98,16 +98,6 @@ def update(plant_id):
                            gardener_id=int(plant[0]["gardenerId"]))
 
 
-@bp.route('/<int:id>/delete', methods=('POST',))
-@login_required
-def delete(id):
-    get_plant(id)
-    db = get_db()
-    db.execute('DELETE FROM post WHERE id = ?', (id,))
-    db.commit()
-    return redirect(url_for('plant.index'))
-
-
 @bp.route('/search', methods=['GET', 'POST'])
 def search_name():
     if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
@@ -160,3 +150,18 @@ def view_plant(common_name, search_results, columns):
     else:
         return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
                                columns=columns)
+
+
+@login_required
+@ bp.route('/<int:plant_id>/delete', methods=('GET', 'POST'))
+def delete_plant(plant_id):
+    if request.method == 'POST':
+        confirmation = request.form['confirmation']
+        if confirmation:
+            response = requests.delete(f'https://localhost:44325/api/plant/{plant_id}', verify=False)
+            print(response.content)
+            return redirect(url_for('gardener.index'))
+    return render_template('gardener/delete.html', plant_id=plant_id)
+
+
+
