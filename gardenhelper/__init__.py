@@ -31,10 +31,6 @@ def create_app(test_config=None):
     app.register_blueprint(plants.bp)
     #app.add_url_rule('/', endpoint='search')
 
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
     from . import db
     db.init_app(app)
 

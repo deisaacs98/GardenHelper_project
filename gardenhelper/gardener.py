@@ -1,11 +1,12 @@
 import json
 from types import SimpleNamespace
 import requests
-from flask import Flask, jsonify, request, redirect, flash, render_template, url_for, Blueprint, make_response, session, \
-    app
+from flask import Flask, jsonify, g, request, redirect, flash, render_template, url_for, Blueprint, make_response, \
+    session, app
 from .auth import login_required
 from .auth import load_logged_in_user
 from .db import get_db
+from .api_keys import weather_key
 from .api_keys import trefle_token
 from .models import gardener
 from .models.gardener import Gardener
@@ -14,6 +15,7 @@ import html
 import pandas as pd
 import numpy as np
 import sklearn as sklearn
+from datetime import datetime
 
 bp = Blueprint('gardener', __name__)
 
@@ -21,12 +23,24 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 @login_required
 def index():
-    user_id = session.get('user_id')
-    response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
-    plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+    user_id = g.user['id']
+    lat = g.user['lat']
+    lng = g.user['lng']
+    now = datetime.now()
+
+    plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
+    plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
+
+    current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid='
+                                            f'{weather_key}')
+    current_weather = json.loads(current_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    historical_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&'
+                                               f'lon={lng}&dt={now}&appid={weather_key}')
+    historical_weather = json.loads(historical_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
     columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
                "light", "soilMoisture"]
-    return render_template('gardener/index.html', garden=plants, columns=columns)
+    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather,
+                           historical_weather=historical_weather)
 
 
 @login_required
