@@ -3,19 +3,20 @@ from types import SimpleNamespace
 import requests
 from flask import Flask, jsonify, g, request, redirect, flash, render_template, url_for, Blueprint, make_response, \
     session, app
-from .auth import login_required
+from .auth import login_required, login
 from .auth import load_logged_in_user
 from .db import get_db
 from .api_keys import weather_key
 from .api_keys import trefle_token
 from .models import gardener
+from gardenhelper import auth
 from .models.gardener import Gardener
 from .models.plant import Plant
 import html
 import pandas as pd
 import numpy as np
 import sklearn as sklearn
-from datetime import datetime
+from datetime import datetime, timedelta
 
 bp = Blueprint('gardener', __name__)
 
@@ -24,23 +25,37 @@ bp = Blueprint('gardener', __name__)
 @login_required
 def index():
     user_id = g.user['id']
+    current_weather = get_current_weather()
+    yesterdays_weather = get_historical_weather(days_ago=1)
+    plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
+    plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
+               "light", "soilMoisture"]
+    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather)
+
+
+@login_required
+def get_current_weather():
+    lat = g.user['lat']
+    lng = g.user['lng']
+    current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon='
+                                            f'{lng}&units=imperial&appid={weather_key}')
+    current_weather = json.loads(current_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    print(current_weather)
+    return current_weather
+
+
+@login_required
+def get_historical_weather(days_ago):
     lat = g.user['lat']
     lng = g.user['lng']
     now = datetime.now()
-
-    plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
-    plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
-
-    current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lng}&appid='
-                                            f'{weather_key}')
-    current_weather = json.loads(current_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    historical_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/onecall/timemachine?lat={lat}&'
-                                               f'lon={lng}&dt={now}&appid={weather_key}')
-    historical_weather = json.loads(historical_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
-               "light", "soilMoisture"]
-    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather,
-                           historical_weather=historical_weather)
+    date = now - timedelta(days=days_ago)
+    historical_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/onecall/timemachine?'
+                                               f'lat={lat}&lon={lng}&dt={date}&units=imperial&appid={weather_key}')
+    historical_weather = json.loads(historical_weather_response.content,
+                                    object_hook=lambda d: SimpleNamespace(**d))
+    return historical_weather
 
 
 @login_required

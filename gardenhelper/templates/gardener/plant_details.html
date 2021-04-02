@@ -35,7 +35,7 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}{{result['common_name']}}{% endblock %}</h1>
+<h1>{% block title %}{% for result in search_results%}{{result['common_name']}}{% endfor %}{% endblock %}</h1>
 <br>
 <br>
 <div class="row">
