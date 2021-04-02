@@ -21,7 +21,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th></th>
+                            <th>Image</th>
                             <th>Common Name</th>
                             <th>Date Planted</th>
                             <th>Last Watering</th>
@@ -30,14 +30,14 @@
                             <th>Soil pH</th>
                             <th>Light</th>
                             <th>Soil Moisture</th>
-                            <th></th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for plant in garden%}
                         <tr>
-                            <td>
-                                <img src={{plant["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            <td class="col-md-2">
+                                <img src={{plant['imageUrl']}} class="img-thumbnail" alt="Plant Image">
                             </td>
                             {% for column in columns %}
                             <td>{{ plant[column] }}</td>
