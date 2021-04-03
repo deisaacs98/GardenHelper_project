@@ -28,10 +28,7 @@
         </div>
     </nav>
 </header>
-  <h1>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h1>
-  {% if g.user %}
-    <a class="action" href="search">Search for Plants to Add</a>
-  {% endif %}
+
 
    {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
@@ -40,22 +37,14 @@
 <br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-title">Current Weather</div>
-            <div class="card-body">
-                <p>Temperature: {{current_weather["main"]["temp"]}} &deg;F</p>
-                <p></p>
-                <p></p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
+
+    <div class="col-md-5">
         <div class="card">
             <div class="card-body">
+                  <h1>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h1>
+                    {% if g.user %}
+                    <a class="action" href="search">Search for Plants to Add</a>
+                    {% endif %}
                 <table>
                     <thead>
                         <tr>
@@ -88,6 +77,20 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h3>Today's Weather</h3>
+                <p>Current Weather: {{current_weather["weather"][0]["main"]}}</p>
+                <p>Current Temperature: {{current_weather["main"]["temp"]}} &deg;F</p>
+                <p>Feels Like: {{current_weather["main"]["feels_like"]}} &deg;F</p>
+                <p>High: {{current_weather["main"]["temp_max"]}} &deg;F</p>
+                <p>Low: {{current_weather["main"]["temp_min"]}}&deg;F</p>
+                <p>Humidity: {{current_weather["main"]["humidity"]}}%</p>
+                <p>Wind Speed: {{current_weather["wind"]["speed"]}} mph</p>
             </div>
         </div>
     </div>
