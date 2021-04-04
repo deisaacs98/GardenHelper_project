@@ -63,10 +63,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label for="last_watering" class="col-sm-2 col-form-label">Last Watering</label>
-                        <div class="col-sm-8">
-                            <input name="last_watering" type="datetime-local" id="last_watering"
-                                   value="{{ request.form['lastWatering'] }}">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="True" id="watered_today" checked>
+                            <label class="form-check-label" for="watered_today">
+                            Did you water your plants today?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="True"
+                                   id="prediction_accurate" checked>
+                            <label class="form-check-label" for="prediction_accurate">
+                            Was your watering prediction accurate?
+                            </label>
                         </div>
                     </div>
                     <div class="row">
@@ -76,7 +86,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label for="height" class="col-sm-2 col-form-label">Height</label>
+                        <label for="height" class="col-sm-2 col-form-label">Height in inches</label>
                         <div class="col-sm-8">
                             <input name="height" id="height" value="{{ request.form['datePlanted'] }}">
                         </div>
@@ -88,19 +98,20 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label for="light" class="col-sm-2 col-form-label">Light</label>
+                        <label for="light" class="col-sm-2 col-form-label">Light(on scale from 0-10)</label>
                         <div class="col-sm-8">
                             <input name="light" id="light" value="{{ request.form['light'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="soil_moisture" class="col-sm-2 col-form-label">Soil Moisture</label>
+                        <label for="soil_moisture" class="col-sm-2 col-form-label">
+                            Soil Moisture(on scale from 0-10)</label>
                         <div class="col-sm-8">
                             <input name="soil_moisture" id="soil_moisture" value="{{ request.form['soilMoisture'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="amount_harvested" class="col-sm-2 col-form-label">Amount Harvested</label>
+                        <label for="amount_harvested" class="col-sm-2 col-form-label">Amount Harvested (in lbs)</label>
                         <div class="col-sm-8">
                             <input name="amount_harvested" id="amount_harvested"
                                    value="{{ request.form['amountHarvested'] }}">

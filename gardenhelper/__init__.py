@@ -57,10 +57,7 @@ def send_reminders():
 
             message = client.messages \
                             .create(
-                                body="Hello, this is Garden Helper with a friendly reminder to water your plants! "
-                                     "Afterwards, please log in to confirm watering and update your plant data."
-                                     "Doing this will help improve our predictions so that future alerts are as accurate"
-                                     "as possible.",
+                                body="Hello, this is Garden Helper with a friendly reminder to water your plants! ",
                                 from_=api_keys.twilio_number,
                                 to="+1"+user['phone']
                             )

@@ -33,13 +33,22 @@ namespace GardenHelperWebAPI.Controllers
             var plant = _context.Plants.Where(m => m.GardenerId == gardener_id);
             return Ok(plant);
         }
-        //// GET Gardener Details
-        //[HttpGet("gardener={gardener_id}")]
-        //public IActionResult GetGardener(int gardener_id)
-        //{
-        //    var gardener = _context.Gardeners.Where(m => m.Id == gardener_id);
-        //    return Ok(gardener);
-        //}
+
+        // GET Logs By Plant
+        [HttpGet("plant={plant_id}/index")]
+        public IActionResult GetLogs(int plant_id)
+        {
+            var log = _context.Logs.Where(m => m.PlantId == plant_id);
+            return Ok(log);
+        }
+
+        // GET EdibleLogs
+        [HttpGet("edible={plant_id}/index")]
+        public IActionResult GetEdibleLogs(int plant_id)
+        {
+            var log = _context.EdibleLogs.Where(m => m.PlantId == plant_id);
+            return Ok(log);
+        }
 
         [HttpGet("gardener={gardener_id}/plant={id}")]
         public IActionResult Get(int id, int gardener_id)
@@ -48,7 +57,20 @@ namespace GardenHelperWebAPI.Controllers
             return Ok(plant);
         }
 
-       
+        [HttpGet("plant={plant_id}/log={id}")]
+        public IActionResult GetLog(int id, int plant_id)
+        {
+            var log = _context.Logs.Where(m => m.Id == id && m.PlantId == plant_id);
+            return Ok(log);
+        }
+
+        [HttpGet("plant={plant_id}/ediblelog={id}")]
+        public IActionResult GetEdibleLog(int id, int plant_id)
+        {
+            var log = _context.EdibleLogs.Where(m => m.Id == id && m.PlantId == plant_id);
+            return Ok(log);
+        }
+
         [HttpPost("post-plant")]
         public IActionResult Post([FromBody] Plant value)
         {
@@ -56,18 +78,41 @@ namespace GardenHelperWebAPI.Controllers
             _context.SaveChanges();
             return Ok();
         }
-        //[HttpPost("post-gardener")]
-        //public IActionResult Post([FromBody] Gardener value)
-        //{
-        //    _context.Gardeners.Add(value);
-        //    _context.SaveChanges();
-        //    return Ok();
-        //}
+
+        [HttpPost("post-log")]
+        public IActionResult Post([FromBody] Log value)
+        {
+            _context.Logs.Add(value);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost("post-edible-log")]
+        public IActionResult Post([FromBody] EdibleLog value)
+        {
+            _context.EdibleLogs.Add(value);
+            _context.SaveChanges();
+            return Ok();
+        }
 
         [HttpPut]
         public IActionResult Put([FromBody] Plant plant)
         {
             _context.Plants.Update(plant);
+            _context.SaveChanges();
+            return Ok();
+        }
+        [HttpPut]
+        public IActionResult Put([FromBody] Log log)
+        {
+            _context.Logs.Update(log);
+            _context.SaveChanges();
+            return Ok();
+        }
+        [HttpPut]
+        public IActionResult Put([FromBody] EdibleLog log)
+        {
+            _context.EdibleLogs.Update(log);
             _context.SaveChanges();
             return Ok();
         }
@@ -80,5 +125,24 @@ namespace GardenHelperWebAPI.Controllers
             _context.SaveChanges();
             return Ok();
         }
+
+        [HttpDelete("log/{id}")]
+        public IActionResult DeleteLog(int id)
+        {
+            var selectedLog = _context.Logs.FirstOrDefault(m => m.Id == id);
+            _context.Logs.Remove(selectedLog);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete("edible-log/{id}")]
+        public IActionResult DeleteEdibleLog(int id)
+        {
+            var selectedLog = _context.EdibleLogs.FirstOrDefault(m => m.Id == id);
+            _context.EdibleLogs.Remove(selectedLog);
+            _context.SaveChanges();
+            return Ok();
+        }
+
     }
 }

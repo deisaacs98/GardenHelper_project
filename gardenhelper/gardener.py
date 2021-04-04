@@ -1,8 +1,11 @@
 import json
+import os
 from types import SimpleNamespace
 import requests
 from flask import Flask, jsonify, g, request, redirect, flash, render_template, url_for, Blueprint, make_response, \
     session, app
+from werkzeug.utils import secure_filename
+
 from .auth import login_required, login
 from .auth import load_logged_in_user
 from .db import get_db
@@ -16,7 +19,7 @@ import html
 import pandas as pd
 import numpy as np
 import sklearn as sklearn
-from datetime import datetime, timedelta, timezone, tzinfo
+from datetime import datetime, timedelta, timezone, tzinfo, date
 from time import time
 
 bp = Blueprint('gardener', __name__)
@@ -52,22 +55,22 @@ def get_current_weather(user):
 def get_weather_df(current, yesterday, two_days, three_days, four_days):
     weather_df = pd.DataFrame(
         {
-            "dt": [current.dt, yesterday.current.dt, two_days.current.dt, three_days.current.dt,
-                   four_days.current.dt],
-            "temp": [current.main.temp, yesterday.current.temp, two_days.current.temp, three_days.current.temp,
+            "dt": [current.dt, yesterday.daily.dt, two_days.daily.dt, three_days.daily.dt,
+                   four_days.daily.dt],
+            "#temp": [current.main.temp, yesterday.current.temp, two_days.current.temp, three_days.current.temp,
                      four_days.current.temp],
-            #"temp_min": [current.main.temp_min, yesterday.current.temp_min, two_days.current.temp_min,
-            #             three_days.current.temp_min, four_days.current.temp_min, five_days.current.temp_min],
-            #"temp_max": [current.main.temp_max, yesterday.current.temp_max, two_days.current.temp_max,
-            #             three_days.current.temp_max, four_days.current.temp_max, five_days.current.temp_max],
-            "humidity": [current.main.humidity, yesterday.current.humidity, two_days.current.humidity,
-                         three_days.current.humidity, four_days.current.humidity],
-            "pressure": [current.main.pressure, yesterday.current.pressure, two_days.current.pressure,
-                         three_days.current.pressure, four_days.current.pressure],
-            "sunrise": [current.sys.sunrise, yesterday.current.sunrise, two_days.current.sunrise,
-                        three_days.current.sunrise,four_days.current.sunrise],
-            "sunset": [current.sys.sunset, yesterday.current.sunrise, two_days.current.sunrise,
-                       three_days.current.sunrise, four_days.current.sunrise]
+            "temp_min": [current.main.temp_min, yesterday.daily.temp.min, two_days.daily.temp.min,
+                         three_days.daily.temp_min, four_days.daily.temp_min],
+            "temp_max": [current.main.temp.max, yesterday.daily.temp.max, two_days.daily.temp.max,
+                         three_days.daily.temp.max, four_days.daily.temp.max],
+            "humidity": [current.main.humidity, yesterday.daily.humidity, two_days.daily.humidity,
+                         three_days.daily.humidity, four_days.daily.humidity],
+            "pressure": [current.main.pressure, yesterday.daily.pressure, two_days.daily.pressure,
+                         three_days.daily.pressure, four_days.daily.pressure],
+            "sunrise": [current.sys.sunrise, yesterday.daily.sunrise, two_days.daily.sunrise,
+                        three_days.daily.sunrise,four_days.daily.sunrise],
+            "sunset": [current.sys.sunset, yesterday.daily.sunrise, two_days.daily.sunrise,
+                       three_days.daily.sunrise, four_days.daily.sunrise]
         }
     )
     print(weather_df)
@@ -107,17 +110,31 @@ def update(plant_id):
         gardener_id = int(request.form['gardener_id'])
         date_planted = str(request.form['date_planted'])
         date_harvested = str(request.form['date_harvested'])
-        last_watering = str(request.form['last_watering'])
         health_status = request.form['health_status']
         height = np.double(request.form['height'])
         soil_ph = np.double(request.form['soil_ph'])
         light = np.double(request.form['light'])
         soil_moisture = np.double(request.form['soil_moisture'])
         amount_harvested = np.double(request.form['amount_harvested'])
+        watered_today_response = request.form.getlist('watered_today')
+        if len(watered_today_response) > 0:
+            watered_today = True
+            last_watering= str(datetime.today())
+        else:
+            watered_today = False
+        prediction_accurate_response = request.form.getlist('prediction_accurate')
+        if len(prediction_accurate_response)>0:
+            prediction_accurate = True
+        else:
+            prediction_accurate = False
         plant = {'Id': plant_id, 'SpeciesId': species_id, 'CommonName': common_name, 'ImageUrl': image_url,
                  'DatePlanted': date_planted, 'DateHarvested': date_harvested, 'LastWatering': last_watering,
                  'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph, 'Light': light,
                  'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested, 'GardenerId': gardener_id}
+        log = {'PlantId': plant_id, 'Date': str(datetime.today()), 'ImageUrl': image_url,
+               'WateredToday': watered_today, 'DateHarvested': date_harvested, 'LastWatering': last_watering,
+               'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph, 'Light': light,
+               'SoilMoisture': soil_moisture, 'PredictionAccurate': prediction_accurate}
         response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
         print(response.content)
         return redirect(url_for('gardener.index'))
