@@ -35,7 +35,7 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}{{result['common_name']}}{% endblock %}</h1>
+<h1>{% block title %}{{plant[0].commonName}}{% endblock %}</h1>
 <br>
 <br>
 <div class="row">
@@ -43,46 +43,19 @@
     <div class="col-md-10">
         <div class="card">
             <div class="card-body">
+
                 <form method="post">
-                    <div class="row">
-                        <input name="species_id" id="species_id" type="hidden" value="{{ species_id}}">
-                        <input name="common_name" id="common_name" type="hidden" value="{{ plant['commonName']}}">
-                        <input name="image_url" id="image_url" type="hidden" value="{{ plant['imageUrl']}}">
-                        <input name="gardener_id" id="gardener_id" type="hidden" value="{{ gardener_id}}">
-                        <label for="date_planted" class="col-sm-2 col-form-label">Date Planted</label>
-                        <div class="col-sm-8">
-                            <input name="date_planted" type="datetime-local" id="date_planted"
-                                   value="{{ request.form['datePlanted'] }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="date_harvested" class="col-sm-2 col-form-label">Date Harvested</label>
-                        <div class="col-sm-8">
-                            <input name="date_harvested" type="datetime-local" id="date_harvested"
-                                   value="{{ request.form['date_harvested'] }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="True" id="watered_today" checked>
-                            <label class="form-check-label" for="watered_today">
-                            Did you water your plants today?
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="True"
-                                   id="prediction_accurate" checked>
-                            <label class="form-check-label" for="prediction_accurate">
-                            Was your watering prediction accurate?
-                            </label>
-                        </div>
-                    </div>
+                    <input name="plant" id="plant" type="hidden" value="{{plant[0]}}">
                     <div class="row">
                         <label for="health_status" class="col-sm-2 col-form-label">Health Status</label>
                         <div class="col-sm-8">
                             <input name="health_status" id="health_status" value="{{ request.form['healthStatus'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="image_url" class="col-sm-2 col-form-label">Image URL</label>
+                        <div class="col-sm-8">
+                            <input name="image_url" id="image_url" value="{{ request.form['image_url'] }}">
                         </div>
                     </div>
                     <div class="row">
@@ -108,6 +81,13 @@
                             Soil Moisture(on scale from 0-10)</label>
                         <div class="col-sm-8">
                             <input name="soil_moisture" id="soil_moisture" value="{{ request.form['soilMoisture'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="date_harvested" class="col-sm-2 col-form-label">Date Harvested</label>
+                        <div class="col-sm-8">
+                            <input name="date_harvested" type="datetime-local" id="date_harvested"
+                                   value="{{ request.form['date_harvested'] }}">
                         </div>
                     </div>
                     <div class="row">

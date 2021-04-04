@@ -102,20 +102,20 @@ namespace GardenHelperWebAPI.Controllers
             _context.SaveChanges();
             return Ok();
         }
-        [HttpPut]
-        public IActionResult Put([FromBody] Log log)
-        {
-            _context.Logs.Update(log);
-            _context.SaveChanges();
-            return Ok();
-        }
-        [HttpPut]
-        public IActionResult Put([FromBody] EdibleLog log)
-        {
-            _context.EdibleLogs.Update(log);
-            _context.SaveChanges();
-            return Ok();
-        }
+        //[HttpPut]
+        //public IActionResult Put([FromBody] Log log)
+        //{
+        //    _context.Logs.Update(log);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
+        //[HttpPut]
+        //public IActionResult Put([FromBody] EdibleLog log)
+        //{
+        //    _context.EdibleLogs.Update(log);
+        //    _context.SaveChanges();
+        //    return Ok();
+        //}
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

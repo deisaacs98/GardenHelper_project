@@ -93,7 +93,7 @@ def get_historical_weather(user, days_ago):
 
 
 @login_required
-def get_plant(plant_id, check_gardener=True):
+def get_plant(plant_id):
     user_id = session.get('user_id')
     response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
     plant = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
@@ -103,50 +103,41 @@ def get_plant(plant_id, check_gardener=True):
 @login_required
 @ bp.route('/<int:plant_id>/update', methods=('GET', 'POST'))
 def update(plant_id):
+    user_id = session.get('user_id')
+    response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
+    plant = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
     if request.method == 'POST':
-        species_id = np.double(request.form['species_id'])
-        common_name = request.form['common_name']
         image_url = request.form['image_url']
-        gardener_id = int(request.form['gardener_id'])
-        date_planted = str(request.form['date_planted'])
-        date_harvested = str(request.form['date_harvested'])
         health_status = request.form['health_status']
         height = np.double(request.form['height'])
         soil_ph = np.double(request.form['soil_ph'])
         light = np.double(request.form['light'])
         soil_moisture = np.double(request.form['soil_moisture'])
-        amount_harvested = np.double(request.form['amount_harvested'])
-        watered_today_response = request.form.getlist('watered_today')
-        if len(watered_today_response) > 0:
-            watered_today = True
-            last_watering= str(datetime.today())
-        else:
-            watered_today = False
-        prediction_accurate_response = request.form.getlist('prediction_accurate')
-        if len(prediction_accurate_response)>0:
-            prediction_accurate = True
-        else:
-            prediction_accurate = False
-        plant = {'Id': plant_id, 'SpeciesId': species_id, 'CommonName': common_name, 'ImageUrl': image_url,
-                 'DatePlanted': date_planted, 'DateHarvested': date_harvested, 'LastWatering': last_watering,
+        plant = plant[0]
+        plant = {'Id': plant_id, 'SpeciesId': plant.speciesId, 'CommonName': plant.commonName,
+                 'ImageUrl': image_url, 'DatePlanted': plant.datePlanted, 'LastWatering': str(datetime.now()),
                  'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph, 'Light': light,
-                 'SoilMoisture': soil_moisture, 'AmountHarvested': amount_harvested, 'GardenerId': gardener_id}
+                 'SoilMoisture': soil_moisture, 'Edible': plant.edible, 'MinTemp': plant.minTemp,
+                 'MaxTemp': plant.maxTemp, 'MinPH': plant.minPH, 'MaxPH': plant.maxPH,
+                 'MinPrecipitation': plant.minPrecipitation, 'MaxPrecipitation': plant.maxPrecipitation,
+                 'SoilHumidity': plant.soilHumidity, 'AtmosphericHumidity': plant.atmosphericHumidity,
+                 'GardenerId': plant.gardenerId}
         log = {'PlantId': plant_id, 'Date': str(datetime.today()), 'ImageUrl': image_url,
-               'WateredToday': watered_today, 'DateHarvested': date_harvested, 'LastWatering': last_watering,
-               'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph, 'Light': light,
-               'SoilMoisture': soil_moisture, 'PredictionAccurate': prediction_accurate}
+               'WateredToday': str(datetime.now()), 'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph,
+               'Light': light}
         response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
         print(response.content)
+        post_response = requests.post('https://localhost:44325/api/plant/post-log', json=log, verify=False)
+        print(post_response)
+        #if plant['edible']:
+        #    edible_log = {'PlantId':plant_id, 'Date': str(datetime.today()), 'Quality': quality,
+        #                  'Harvested': harvested, 'DaysToHarvest': health_status, 'AmountHarvested': height}
         return redirect(url_for('gardener.index'))
     else:
-        user_id = session.get('user_id')
-        response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/plant={plant_id}', verify=False)
-        plant = json.loads(response.content)
-    return render_template('gardener/update.html', plant_id=plant_id, plant=plant, species_id=int(plant[0]["speciesId"]),
-                           gardener_id=int(plant[0]["gardenerId"]))
+        return render_template('gardener/update.html', plant_id=plant_id, plant=plant)
 
 
-@bp.route('/search', methods=['GET', 'POST'])
+@bp.route('/search', methods=('GET', 'POST'))
 def search_name():
     if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
         gardener.first_search = False
