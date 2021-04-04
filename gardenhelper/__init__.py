@@ -46,7 +46,7 @@ def create_app(test_config=None):
 def send_reminders():
     db = get_db()
     users = db.execute(
-        'SELECT * FROM user WHERE reminder_time = ?', (datetime.now().time(),)
+        'SELECT * FROM user WHERE reminder = ?', (True,)
     ).fetchall()
     for user in users:
         send_alert = water_plants(user)

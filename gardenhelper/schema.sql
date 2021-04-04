@@ -16,5 +16,5 @@ CREATE TABLE user (
   phone TEXT NOT NULL,
   lat DOUBLE,
   lng DOUBLE,
-  reminder_time TIME
+  reminder NUMBER(1)
 );
