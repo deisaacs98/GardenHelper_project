@@ -7,7 +7,6 @@ CREATE TABLE user (
   first_name TEXT NOT NULL,
   middle_initial TEXT,
   last_name TEXT NOT NULL,
-
   address_line1 TEXT NOT NULL,
   address_line2 TEXT,
   city TEXT NOT NULL,
@@ -16,5 +15,6 @@ CREATE TABLE user (
   email TEXT NOT NULL,
   phone TEXT NOT NULL,
   lat DOUBLE,
-  lng DOUBLE
+  lng DOUBLE,
+  reminder_time TIME
 );

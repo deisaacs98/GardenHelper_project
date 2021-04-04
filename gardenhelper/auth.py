@@ -33,6 +33,7 @@ def register():
         zip_code = request.form['zip_code']
         email = request.form['email']
         phone = request.form['phone']
+        reminder_time = request.form['reminder_time']
         geo_response = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={address_line1}+'
                                     f'{address_line2},+{city},+{state}+{zip_code}&key={api_keys.geocoding_key}')
         lat_lng = json.loads(geo_response.content)
@@ -65,6 +66,8 @@ def register():
             error = 'Email address is required.'
         elif not phone:
             error = 'Phone number is required.'
+        elif not reminder_time:
+            error = 'Reminder time is required.'
         elif db.execute(
             'SELECT id FROM user WHERE username = ?', (username,)
         ).fetchone() is not None:
@@ -73,10 +76,10 @@ def register():
         if error is None:
             db.execute(
                 'INSERT INTO user (username, password, first_name, middle_initial, last_name, address_line1, '
-                'address_line2, city, state, zip_code, email, phone, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '
-                '?, ?, ?, ?)',
+                'address_line2, city, state, zip_code, email, phone, reminder_time, lat, lng) VALUES (?, ?, ?, ?, ?, '
+                '?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (username, generate_password_hash(password), first_name, middle_initial, last_name, address_line1,
-                 address_line2, city, state, zip_code, email, phone, lat, lng)
+                 address_line2, city, state, zip_code, email, phone, reminder_time, lat, lng)
             )
             db.commit()
             user = db.execute(
@@ -152,4 +155,5 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
+
 

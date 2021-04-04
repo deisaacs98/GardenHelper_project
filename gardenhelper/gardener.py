@@ -26,13 +26,12 @@ bp = Blueprint('gardener', __name__)
 @login_required
 def index():
     user_id = g.user['id']
-    current_weather = get_current_weather()
-    yesterdays_weather = get_historical_weather(days_ago=1)
-    two_days = get_historical_weather(days_ago=2)
-    three_days = get_historical_weather(days_ago=3)
-    four_days = get_historical_weather(days_ago=4)
-    five_days = get_historical_weather(days_ago=5)
-    weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days, five_days)
+    current_weather = get_current_weather(user=g.user)
+    #yesterdays_weather = get_historical_weather(user=g.user, days_ago=1)
+    #two_days = get_historical_weather(user=g.user, days_ago=2)
+    #three_days = get_historical_weather(user=g.user, days_ago=3)
+    #four_days = get_historical_weather(user=g.user, days_ago=4)
+    #weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
     plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
     plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
     columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
@@ -41,34 +40,34 @@ def index():
 
 
 @login_required
-def get_current_weather():
-    lat = g.user['lat']
-    lng = g.user['lng']
+def get_current_weather(user):
+    lat = user['lat']
+    lng = user['lng']
     current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon='
                                             f'{lng}&units=imperial&appid={weather_key}')
     current_weather = json.loads(current_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
     return current_weather
 
 
-def get_weather_df(current, yesterday, two_days, three_days, four_days, five_days):
+def get_weather_df(current, yesterday, two_days, three_days, four_days):
     weather_df = pd.DataFrame(
         {
             "dt": [current.dt, yesterday.current.dt, two_days.current.dt, three_days.current.dt,
-                   four_days.current.dt, five_days.current.dt],
+                   four_days.current.dt],
             "temp": [current.main.temp, yesterday.current.temp, two_days.current.temp, three_days.current.temp,
-                     four_days.current.temp, five_days.current.temp],
+                     four_days.current.temp],
             #"temp_min": [current.main.temp_min, yesterday.current.temp_min, two_days.current.temp_min,
             #             three_days.current.temp_min, four_days.current.temp_min, five_days.current.temp_min],
             #"temp_max": [current.main.temp_max, yesterday.current.temp_max, two_days.current.temp_max,
             #             three_days.current.temp_max, four_days.current.temp_max, five_days.current.temp_max],
             "humidity": [current.main.humidity, yesterday.current.humidity, two_days.current.humidity,
-                         three_days.current.humidity, four_days.current.humidity, five_days.current.humidity],
+                         three_days.current.humidity, four_days.current.humidity],
             "pressure": [current.main.pressure, yesterday.current.pressure, two_days.current.pressure,
-                         three_days.current.pressure, four_days.current.pressure, five_days.current.pressure],
+                         three_days.current.pressure, four_days.current.pressure],
             "sunrise": [current.sys.sunrise, yesterday.current.sunrise, two_days.current.sunrise,
-                        three_days.current.sunrise,four_days.current.sunrise, five_days.current.sunrise],
+                        three_days.current.sunrise,four_days.current.sunrise],
             "sunset": [current.sys.sunset, yesterday.current.sunrise, two_days.current.sunrise,
-                       three_days.current.sunrise, four_days.current.sunrise, five_days.current.sunrise]
+                       three_days.current.sunrise, four_days.current.sunrise]
         }
     )
     print(weather_df)
@@ -76,9 +75,9 @@ def get_weather_df(current, yesterday, two_days, three_days, four_days, five_day
 
 
 @login_required
-def get_historical_weather(days_ago):
-    lat = g.user['lat']
-    lng = g.user['lng']
+def get_historical_weather(user, days_ago):
+    lat = user['lat']
+    lng = user['lng']
     today = datetime.today()
     utc_time = today.replace(tzinfo=timezone.utc)
     date = utc_time - timedelta(days=days_ago)
@@ -195,5 +194,16 @@ def delete_plant(plant_id):
             return redirect(url_for('gardener.index'))
     return render_template('gardener/delete.html', plant_id=plant_id)
 
+
+def water_plants(user):
+    current_weather = get_current_weather(user=user)
+    yesterdays_weather = get_historical_weather(user=user, days_ago=1)
+    two_days = get_historical_weather(user=user, days_ago=2)
+    three_days = get_historical_weather(user=user, days_ago=3)
+    four_days = get_historical_weather(user=user, days_ago=4)
+    weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
+
+    conclusion = True
+    return conclusion
 
 
