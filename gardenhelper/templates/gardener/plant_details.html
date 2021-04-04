@@ -35,7 +35,7 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}{% for result in search_results%}{{result['common_name']}}{% endfor %}{% endblock %}</h1>
+<h1>{% block title %}{% endblock %}</h1>
 <br>
 <br>
 <div class="row">
@@ -55,7 +55,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for result in search_results%}
                         <tr>
                             <td class="col-md-3">
                                 <img src={{result['image_url']}} class="img-thumbnail" alt="Plant Image"></img>
@@ -74,7 +73,6 @@
                                 </form>
                             </td>
                         </tr>
-                        {% endfor %}
                     </tbody>
                 </table>
             </div>

@@ -67,6 +67,10 @@
                                 <form method="post">
                                     <input name="common_name" id="common_name" type="hidden"
                                            value="{{ result['common_name']}}">
+                                    <input name="species_id" id="species_id" type="hidden"
+                                           value="{{ result['id']}}">
+                                    <input name="image_url" id="image_url" type="hidden"
+                                           value="{{ result['image_url']}}">
                                     <input type="submit" value="View Details">
                                 </form>
                             </td>

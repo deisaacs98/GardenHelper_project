@@ -150,12 +150,11 @@ def search_name():
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
         gardener.found_plant = True
         common_name = request.form['common_name']
-        response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
-                                f'{common_name}')
-        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        species_id = request.form['species_id']
+        response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
+        result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
-        return render_template('gardener/plant_details.html', page_title=common_name,
-                               search_results=search_results, columns=columns)
+        return render_template('gardener/plant_details.html', page_title=common_name, result=result, columns=columns)
     elif request.method == 'POST' and not gardener.first_search and gardener.found_plant:
         gardener.first_search = True
         gardener.found_plant = False
@@ -163,7 +162,8 @@ def search_name():
         image_url = request.form['image_url']
         species_id = np.double(request.form['species_id'])
         user_id = session.get('user_id')
-        plant = {'CommonName': common_name, 'SpeciesId': species_id, 'ImageUrl': image_url,  'GardenerId': user_id}
+        plant = {'CommonName': common_name, 'SpeciesId': species_id, 'DatePlanted': str(datetime.now()),
+                 'ImageUrl': image_url, 'GardenerId': user_id}
         response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
         print(response.content)
 
