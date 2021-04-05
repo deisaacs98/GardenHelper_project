@@ -145,10 +145,38 @@ def update(plant_id):
         log_response = requests.get(f'https://localhost:44325/api/plant/plant={plant_id}/index', verify=False)
 
         plant_logs = json.loads(log_response.content, object_hook=lambda d: SimpleNamespace(**d))
-        print(plant_logs)
-        log_columns = ['date', 'wateredToday', 'healthStatus', 'height', 'soilPH', 'light', 'soilMoisture']
-        return render_template('gardener/update.html', plant_id=plant_id, plant=plant, plant_logs=plant_logs,
-                               log_columns=log_columns)
+        if len(plant_logs) > 0:
+            print(plant_logs)
+            log_columns = ['date', 'wateredToday', 'healthStatus', 'height', 'soilPH', 'light', 'soilMoisture']
+            df = pd.read_json(log_response.content)
+            print(df)
+            print(df['date'])
+            date_labels = df['date'].to_list()
+            dates = []
+            for date_label in date_labels:
+                log_date = datetime.date(date_label)
+                dates.append(str(log_date))
+            height_labels = df['height'].to_list()
+            ph_labels = df['soilPH'].to_list()
+            light_labels = df['light'].to_list()
+            moisture_labels = df['soilMoisture'].to_list()
+            log_dates = html.unescape(dates)
+            height_logs = html.unescape(height_labels)
+            ph_logs = html.unescape(ph_labels)
+            light_logs = html.unescape(light_labels)
+            moisture_logs = html.unescape(moisture_labels)
+            print(log_dates)
+            print(moisture_logs)
+            print(light_logs)
+            return render_template('gardener/update.html', plant_id=plant_id, plant=plant, plant_logs=plant_logs,
+                                   log_columns=log_columns, log_dates=log_dates, height_logs=height_logs, ph_logs=ph_logs,
+                                   light_logs=light_logs, moisture_logs=moisture_logs)
+        else:
+            log_columns = ['date', 'wateredToday', 'healthStatus', 'height', 'soilPH', 'light', 'soilMoisture']
+
+            return render_template('gardener/update.html', plant_id=plant_id, plant=plant, plant_logs=plant_logs,
+                                   log_columns=log_columns, log_dates=[], height_logs=[],
+                                   ph_logs=[], light_logs=[], moisture_logs=[])
 
 
 @bp.route('/search', methods=('GET', 'POST'))

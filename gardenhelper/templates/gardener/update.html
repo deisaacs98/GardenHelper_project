@@ -43,7 +43,6 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-
                 <form method="post">
                     <input name="plant" id="plant" type="hidden" value="{{plant[0]}}">
                     <div class="row">
@@ -96,9 +95,56 @@
                 </form>
             </div>
         </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card">
+            <canvas id="myCanvas" width="200" height="200"></canvas>
+
+        </div>
 
     </div>
 </div>
+<script>
+var ctx = document.getElementById("myCanvas").getContext('2d');
+var myCanvas=new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ log_dates | safe }},
+        datasets: [{
+            data: {{height_logs}},
+            label: "Height",
+            borderColor: "#2E0F15",
+            fill: false
+        }, {
+                        data: {{ph_logs}},
+                        label: "Soil pH",
+                        borderColor: "#70163C",
+                        fill: false
+        }, {
+                        data: {{light_logs}},
+                        label: "Light",
+                        borderColor: "#D5573B",
+                        fill: false
+        }, {
+                        data: {{moisture_logs}},
+                        label: "Soil Moisture",
+                        borderColor: "#545643",
+                        fill: false
+        }
+        ]
+    },
+    options: {
+    title: {
+      display: true,
+      text: 'Plant data by date'
+    },
+    hover: {
+     mode: 'index',
+     intersect: true
+    },
+  }
+    });
+</script>
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
@@ -123,11 +169,11 @@
                     <tbody>
                         {% for log in plant_logs%}
                         <tr>
-                            <td class="col-md-2">
+                            <td class="col-md-5">
                                 <img src={{log['imageUrl']}} class="img-thumbnail" alt="Plant Image">
                             </td>
                             {% for column in log_columns %}
-                            <td class="col-md-2">{{ log[column] }}</td>
+                            <td class="col-md-1">{{ log[column] }}</td>
                             {% endfor %}
                         </tr>
                         {% endfor %}
@@ -136,6 +182,6 @@
             </div>
         </div>
     </div>
-
 </div>
+
 {% endblock %}
