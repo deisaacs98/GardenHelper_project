@@ -12,7 +12,7 @@ from .db import get_db
 from .api_keys import weather_key
 from .api_keys import trefle_token
 from .models import gardener
-from gardenhelper import auth
+
 from .models.gardener import Gardener
 from .models.plant import Plant
 import html
@@ -37,8 +37,7 @@ def index():
     #weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
     plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
     plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus", "height", "soilPH",
-               "light", "soilMoisture"]
+    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus"]
     return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather)
 
 
@@ -46,9 +45,10 @@ def index():
 def get_current_weather(user):
     lat = user['lat']
     lng = user['lng']
-    current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon='
+    current_weather_response = requests.get(f'https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon='
                                             f'{lng}&units=imperial&appid={weather_key}')
     current_weather = json.loads(current_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    print(current_weather)
     return current_weather
 
 
@@ -175,20 +175,6 @@ def search_name():
     else:
         gardener.first_search = True
         return render_template('gardener/search.html')
-
-
-@bp.route('/search_results', methods=['GET', 'POST'])
-def view_plant(common_name, search_results, columns):
-    if request.method == 'POST':
-        response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
-                                f'{common_name}')
-        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
-        columns = ["common_name", "scientific_name", "family_common_name", "family"]
-        return render_template('gardener/plant_details.html', page_title=common_name,
-                               search_results=search_results, columns=columns)
-    else:
-        return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
-                               columns=columns)
 
 
 @login_required

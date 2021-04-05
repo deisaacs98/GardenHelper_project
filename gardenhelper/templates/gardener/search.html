@@ -35,16 +35,24 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}Search Plants{% endblock %}</h1>
+
 <br>
 <br>
 <div class="row">
     <div class="col-md-1"></div>
+
+    <div class="col-md-4">
+        <img class="img-fluid" src="/static/images/poppies.jpg" alt="Poppies">
+    </div>
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
+
+                <h2 class="card-title">{% block title %}Search for a plant in our database{% endblock %}</h2>
+                    <p class="card-text">If there is a plant you would like to add to your garden, you can search for
+                    it in our extensive database. Once you find the plant, select View Details to learn more about it
+                    and decide whether or not you would like to add it to your garden!</p>
                 <form method="post">
-                    <label for="common_name">Search For A Plant In Our Database</label><br>
                     <input name="common_name" id="common_name" value="{{ request.form['common_name'] }}" required>
                     <input type="submit" value="Search">
                 </form>

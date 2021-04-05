@@ -38,26 +38,56 @@
 <div class="row">
     <div class="col-md-1"></div>
 
-    <div class="col-md-5">
+    <div class="col-md-7">
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Thank you for using Garden Helper</h3>
+                    <p class="card-text">If there is a plant you would like to add to your garden, you can search for
+                    it in our database! You can then view details about the plant and decide whether or not to add it
+                    to your garden.</p>
+                    <p>Once the plant is in your garden, you will receive text messages on days that you should water.
+                    After you water your plants, log in to confirm that you have watered the plant and to record any
+                    useful measurements that you might have taken!</p>
+                </div>
+                <img class="card-img-bottom" src="/static/images/pink_flowers.jpg" alt="Pink flowers">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
         <div class="card">
             <div class="card-body">
-                  <h1>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h1>
-                    {% if g.user %}
-                    <a class="action" href="search">Search for Plants to Add</a>
-                    {% endif %}
+                <h3>Today's Weather</h3>
+                <p>Current Weather: {{current_weather.current.weather[0].main}}</p>
+                <p>Current Temperature: {{current_weather.current.temp}} &deg;F</p>
+                <p>Feels Like: {{current_weather.current.feels_like}} &deg;F</p>
+                <p>High: {{current_weather.daily[0].temp.max}} &deg;F</p>
+                <p>Low: {{current_weather.daily[0].temp.min}}&deg;F</p>
+                <p>Humidity: {{current_weather.current.humidity}}%</p>
+                <p>Wind Speed: {{current_weather.current.wind_speed}} mph</p>
+                <p>Chance of Precipitation: {{current_weather.daily[0].pop}}%</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+
                 <table>
                     <thead>
                         <tr>
-                            <th>Image</th>
+                            <th>
+                                <h3>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h3>
+                            </th>
                             <th>Common Name</th>
                             <th>Date Planted</th>
                             <th>Last Watering</th>
-                            <th>Health Status</th>
-                            <th>Height</th>
-                            <th>Soil pH</th>
-                            <th>Light</th>
-                            <th>Soil Moisture</th>
-                            <th>Actions</th>
+                            <th>Status</th>
+                            <th>Watered</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,11 +97,13 @@
                                 <img src={{plant['imageUrl']}} class="img-thumbnail" alt="Plant Image">
                             </td>
                             {% for column in columns %}
-                            <td>{{ plant[column] }}</td>
+                            <td class="col-md-2">{{ plant[column] }}</td>
                             {% endfor %}
-                            <td>
-                                <a class="action" href="{{plant['id']}}/update">Update</a>
-                                <a class="action" href="{{plant['id']}}/delete">Delete</a>
+                            <td class="col-md-1">
+                                <a class="nav-link-active" href="{{plant['id']}}/update">Confirm</a>
+                            </td>
+                            <td class="col-md-1">
+                                <a class="nav-link-active" href="{{plant['id']}}/delete">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -80,19 +112,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-body">
-                <h3>Today's Weather</h3>
-                <p>Current Weather: {{current_weather["weather"][0]["main"]}}</p>
-                <p>Current Temperature: {{current_weather["main"]["temp"]}} &deg;F</p>
-                <p>Feels Like: {{current_weather["main"]["feels_like"]}} &deg;F</p>
-                <p>High: {{current_weather["main"]["temp_max"]}} &deg;F</p>
-                <p>Low: {{current_weather["main"]["temp_min"]}}&deg;F</p>
-                <p>Humidity: {{current_weather["main"]["humidity"]}}%</p>
-                <p>Wind Speed: {{current_weather["wind"]["speed"]}} mph</p>
-            </div>
-        </div>
-    </div>
+
 </div>
 {% endblock %}
