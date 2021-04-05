@@ -82,7 +82,8 @@ namespace GardenHelperWebAPI.Controllers
         [HttpPost("post-log")]
         public IActionResult Post([FromBody] Log value)
         {
-            _context.Logs.Add(value);
+            Log plant_log = value;
+            _context.Logs.Add(plant_log);
             _context.SaveChanges();
             return Ok();
         }

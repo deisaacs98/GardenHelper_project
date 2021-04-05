@@ -35,66 +35,61 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}{{plant[0].commonName}}{% endblock %}</h1>
+
 <br>
 <br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-10">
+    <div class="col-md-5">
         <div class="card">
             <div class="card-body">
 
                 <form method="post">
                     <input name="plant" id="plant" type="hidden" value="{{plant[0]}}">
                     <div class="row">
-                        <label for="health_status" class="col-sm-2 col-form-label">Health Status</label>
+                        <div class="col-sm-4">Did you water today?</div>
+                        <div class="col-sm-8">
+                            <input type="radio" id="Wet" name="watered_today" value={{True}}>
+                            <label for="Wet">Yes</label>
+                            <input type="radio" id="Dry" name="watered_today" value={{False}}>
+                            <label for="Dry">No</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="health_status" class="col-sm-4 col-form-label">Health Status</label>
                         <div class="col-sm-8">
                             <input name="health_status" id="health_status" value="{{ request.form['healthStatus'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="image_url" class="col-sm-2 col-form-label">Image URL</label>
+                        <label for="image_url" class="col-sm-4 col-form-label">Image URL</label>
                         <div class="col-sm-8">
                             <input name="image_url" id="image_url" value="{{ request.form['image_url'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="height" class="col-sm-2 col-form-label">Height in inches</label>
+                        <label for="height" class="col-sm-4 col-form-label">Height in inches</label>
                         <div class="col-sm-8">
                             <input name="height" id="height" value="{{ request.form['datePlanted'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="soil_ph" class="col-sm-2 col-form-label">Soil pH</label>
+                        <label for="soil_ph" class="col-sm-4 col-form-label">Soil pH</label>
                         <div class="col-sm-8">
                             <input name="soil_ph" id="soil_ph" value="{{ request.form['soilPH'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="light" class="col-sm-2 col-form-label">Light(on scale from 0-10)</label>
+                        <label for="light" class="col-sm-4 col-form-label">Light(on scale from 0-10)</label>
                         <div class="col-sm-8">
                             <input name="light" id="light" value="{{ request.form['light'] }}">
                         </div>
                     </div>
                     <div class="row">
-                        <label for="soil_moisture" class="col-sm-2 col-form-label">
+                        <label for="soil_moisture" class="col-sm-4 col-form-label">
                             Soil Moisture(on scale from 0-10)</label>
                         <div class="col-sm-8">
                             <input name="soil_moisture" id="soil_moisture" value="{{ request.form['soilMoisture'] }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="date_harvested" class="col-sm-2 col-form-label">Date Harvested</label>
-                        <div class="col-sm-8">
-                            <input name="date_harvested" type="datetime-local" id="date_harvested"
-                                   value="{{ request.form['date_harvested'] }}">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="amount_harvested" class="col-sm-2 col-form-label">Amount Harvested (in lbs)</label>
-                        <div class="col-sm-8">
-                            <input name="amount_harvested" id="amount_harvested"
-                                   value="{{ request.form['amountHarvested'] }}">
                         </div>
                     </div>
                     <input type="submit" value="Update">
@@ -104,5 +99,43 @@
 
     </div>
 </div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
 
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <h3>{% block title %}{{plant[0].commonName}} Log{% endblock %}</h3>
+                            </th>
+                            <th>Date</th>
+                            <th>Watered</th>
+                            <th>Status</th>
+                            <th>Height</th>
+                            <th>Soil pH</th>
+                            <th>Light</th>
+                            <th>Soil Moisture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in plant_logs%}
+                        <tr>
+                            <td class="col-md-2">
+                                <img src={{log['imageUrl']}} class="img-thumbnail" alt="Plant Image">
+                            </td>
+                            {% for column in log_columns %}
+                            <td class="col-md-2">{{ log[column] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
 {% endblock %}

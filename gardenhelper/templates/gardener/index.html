@@ -15,13 +15,13 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">My Plants</a>
+                        <a class="nav-link active"  aria-current="page" href="/">My Plants</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="search">Search</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="auth/logout">Sign Out</a>
+                        <a class="nav-link active"  aria-current="page" href="auth/logout">Sign Out</a>
                     </li>
                 </ul>
             </div>
@@ -86,7 +86,7 @@
                             <th>Date Planted</th>
                             <th>Last Watering</th>
                             <th>Status</th>
-                            <th>Watered</th>
+                            <th>Update</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -100,7 +100,7 @@
                             <td class="col-md-2">{{ plant[column] }}</td>
                             {% endfor %}
                             <td class="col-md-1">
-                                <a class="nav-link-active" href="{{plant['id']}}/update">Confirm</a>
+                                <a class="nav-link-active" href="{{plant['id']}}/update">Update</a>
                             </td>
                             <td class="col-md-1">
                                 <a class="nav-link-active" href="{{plant['id']}}/delete">Delete</a>
