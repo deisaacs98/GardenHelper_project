@@ -35,13 +35,13 @@
         </div>
     </nav>
 </header>
-<h2>{% block title %}result['common_name']{% endblock %}</h2>
+<h2>{% block title %}{{result['common_name']}}{% endblock %}</h2>
 <br>
 <br>
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <div class="card">
+        <div class="card border-success mb-3">
             <div class="card-body">
                 <table>
                     <thead>
@@ -51,6 +51,9 @@
                             <th>Scientific Name</th>
                             <th>Family Common Name</th>
                             <th>Family Scientific Name</th>
+                            <th>Average Height</th>
+                            <th></th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -62,6 +65,9 @@
                             {% for column in columns %}
                             <td class="col-md-2">{{ result[column] }}</td>
                             {% endfor %}
+                            <td>{{result.specifications['average_height']}}</td>
+                            <td></td>
+                            <td></td>
                             <td class="col-md-1">
                                 <form method="post">
                                     <input name="common_name"  type="hidden"
