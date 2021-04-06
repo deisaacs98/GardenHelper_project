@@ -6,13 +6,14 @@ from flask import Flask, jsonify, g, request, redirect, flash, render_template, 
     session, app
 from werkzeug.utils import secure_filename
 
+import gardenhelper
+from gardenhelper import auth
 from .auth import login_required, login
 from .auth import load_logged_in_user
 from .db import get_db
 from .api_keys import weather_key
 from .api_keys import trefle_token
 from .models import gardener
-
 from .models.gardener import Gardener
 from .models.plant import Plant
 import html
@@ -28,7 +29,10 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 @login_required
 def index():
-    user_id = g.user['id']
+    user = g.user
+    user_id = user['id']
+    lat = user['lat']
+    lng = user['lng']
     current_weather = get_current_weather(user=g.user)
     #yesterdays_weather = get_historical_weather(user=g.user, days_ago=1)
     #two_days = get_historical_weather(user=g.user, days_ago=2)
@@ -38,7 +42,23 @@ def index():
     plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
     plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
     columns = ["commonName", "datePlanted", "lastWatering", "healthStatus"]
-    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather)
+    market_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat={lat}'
+                                   f'&lng={lng}')
+    markets = json.loads(market_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    print(markets)
+    market1_id = markets.results[0].id
+    market2_id = markets.results[1].id
+    market3_id = markets.results[2].id
+    market1_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id={market1_id}')
+    market1 = json.loads(market1_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    market2_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id={market2_id}')
+    market2 = json.loads(market2_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    market3_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id={market3_id}')
+    market3 = json.loads(market3_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    nearby_markets = [market1, market2, market3]
+    print(market1)
+    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather,
+                           nearby_markets=nearby_markets, markets=markets)
 
 
 @login_required
@@ -73,7 +93,6 @@ def get_weather_df(current, yesterday, two_days, three_days, four_days):
                        three_days.daily.sunrise, four_days.daily.sunrise]
         }
     )
-    print(weather_df)
     return weather_df
 
 
@@ -88,7 +107,6 @@ def get_historical_weather(user, days_ago):
                                                f'lat={lat}&lon={lng}&dt={int(date.timestamp())}&units=imperial&appid='
                                                f'{weather_key}')
     historical_weather = json.loads(historical_weather_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    print(historical_weather)
     return historical_weather
 
 
@@ -133,10 +151,7 @@ def update(plant_id):
                'WateredToday': bool(watered), 'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph,
                'Light': light}
         response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
-        print(response.content)
         post_response = requests.post('https://localhost:44325/api/plant/post-log', json=log, verify=False)
-        print(post_response)
-        print(post_response.content)
         #if plant['edible']:
         #    edible_log = {'PlantId':plant_id, 'Date': str(datetime.today()), 'Quality': quality,
         #                  'Harvested': harvested, 'DaysToHarvest': health_status, 'AmountHarvested': height}
@@ -146,7 +161,6 @@ def update(plant_id):
 
         plant_logs = json.loads(log_response.content, object_hook=lambda d: SimpleNamespace(**d))
         if len(plant_logs) > 0:
-            print(plant_logs)
             log_columns = ['date', 'wateredToday', 'healthStatus', 'height', 'soilPH', 'light', 'soilMoisture']
             df = pd.read_json(log_response.content)
             print(df)
@@ -165,9 +179,6 @@ def update(plant_id):
             ph_logs = html.unescape(ph_labels)
             light_logs = html.unescape(light_labels)
             moisture_logs = html.unescape(moisture_labels)
-            print(log_dates)
-            print(moisture_logs)
-            print(light_logs)
             return render_template('gardener/update.html', plant_id=plant_id, plant=plant, plant_logs=plant_logs,
                                    log_columns=log_columns, log_dates=log_dates, height_logs=height_logs, ph_logs=ph_logs,
                                    light_logs=light_logs, moisture_logs=moisture_logs)
@@ -207,7 +218,6 @@ def search_name():
         plant = {'CommonName': common_name, 'SpeciesId': species_id, 'DatePlanted': str(datetime.now()),
                  'ImageUrl': image_url, 'GardenerId': user_id}
         response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
-        print(response.content)
 
         #response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
                                 #f'{common_name}')
@@ -231,16 +241,18 @@ def delete_plant(plant_id):
     return render_template('gardener/delete.html', plant_id=plant_id)
 
 
-
-def water_plants(user):
-    current_weather = get_current_weather(user=user)
-    yesterdays_weather = get_historical_weather(user=user, days_ago=1)
-    two_days = get_historical_weather(user=user, days_ago=2)
-    three_days = get_historical_weather(user=user, days_ago=3)
-    four_days = get_historical_weather(user=user, days_ago=4)
-    weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
-
-    conclusion = True
-    return conclusion
-
+@login_required
+@bp.route('/water_plants', methods=('GET', 'POST'))
+def water_plants():
+    current_weather = get_current_weather(user=g.user)
+    #yesterdays_weather = get_historical_weather(user=user, days_ago=1)
+    #two_days = get_historical_weather(user=user, days_ago=2)
+    #three_days = get_historical_weather(user=user, days_ago=3)
+    #four_days = get_historical_weather(user=user, days_ago=4)
+    #weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
+    if current_weather.daily[0].pop < 50:
+        auth.send_text(g.user, "You should water your plants today.")
+    else:
+        auth.send_text(g.user, "You do not need to water your plants today.")
+    return redirect(url_for('gardener.index'))
 

@@ -1,5 +1,6 @@
 import functools
 import json
+import os
 from datetime import datetime, timedelta
 from types import SimpleNamespace
 
@@ -7,14 +8,11 @@ import requests
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+from twilio.rest import Client
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from gardenhelper import gardener
 from gardenhelper.api_keys import weather_key
 from gardenhelper.db import get_db
-from gardenhelper import gardener
 from gardenhelper import api_keys
-
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
@@ -33,11 +31,6 @@ def register():
         zip_code = request.form['zip_code']
         email = request.form['email']
         phone = request.form['phone']
-        get_reminders = request.form.getlist('reminder')
-        if "True" in get_reminders:
-            reminder = True
-        else:
-            reminder = False
         geo_response = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={address_line1}+'
                                     f'{address_line2},+{city},+{state}+{zip_code}&key={api_keys.geocoding_key}')
         lat_lng = json.loads(geo_response.content)
@@ -45,8 +38,6 @@ def register():
         geo = res[0]["geometry"]["location"]
         lat = geo["lat"]
         lng = geo["lng"]
-        print(lat)
-        print(lng)
         db = get_db()
         error = None
 
@@ -87,6 +78,7 @@ def register():
             user = db.execute(
                 'SELECT * FROM user WHERE username = ?', (username,)
             ).fetchone()
+            send_text(user, "Thank you for registering with Garden Helper!")
             session.clear()
             session['user_id'] = user['id']
 
@@ -159,3 +151,33 @@ def login_required(view):
     return wrapped_view
 
 
+def send_text(user, text_message):
+    client = Client(api_keys.twilio_sid, api_keys.twilio_token)
+    message = client.messages \
+                    .create(
+                        body=text_message,
+                        from_=api_keys.twilio_number,
+                        to="+1" + user['phone']
+                    )
+    print(message.sid)
+
+#def send_reminders():
+#    db = get_db()
+#    users = db.execute(
+#        'SELECT * FROM user'
+#    ).fetchall()
+#    for user in users:
+#        #send_alert = water_plants(user)
+#        send_alert=True
+#        if send_alert:
+#            account_sid = os.environ[api_keys.twilio_sid]
+#            auth_token = os.environ[api_keys.twilio_token]
+#            client = Client(account_sid, auth_token)
+#
+#            message = client.messages \
+#                .create(
+#                    body="Hello, this is Garden Helper with a friendly reminder to water your plants! ",
+#                    from_=api_keys.twilio_number,
+#                    to="+1" + user['phone']
+#                )
+#            print(message.sid)

@@ -1,12 +1,6 @@
-from datetime import datetime
 import os
-from twilio.rest import Client
 from flask import Flask
-import time
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
 from gardenhelper.db import get_db
-from gardenhelper.gardener import water_plants
 from gardenhelper import api_keys
 
 
@@ -43,24 +37,6 @@ def create_app(test_config=None):
     return app
 
 
-def send_reminders():
-    db = get_db()
-    users = db.execute(
-        'SELECT * FROM user WHERE reminder = ?', (True,)
-    ).fetchall()
-    for user in users:
-        send_alert = water_plants(user)
-        if send_alert:
-            account_sid = os.environ[api_keys.twilio_sid]
-            auth_token = os.environ[api_keys.twilio_token]
-            client = Client(account_sid, auth_token)
 
-            message = client.messages \
-                            .create(
-                                body="Hello, this is Garden Helper with a friendly reminder to water your plants! ",
-                                from_=api_keys.twilio_number,
-                                to="+1"+user['phone']
-                            )
-            print(message.sid)
 
 

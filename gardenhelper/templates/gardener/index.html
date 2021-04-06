@@ -66,6 +66,28 @@
                 <p>Humidity: {{current_weather.current.humidity}}%</p>
                 <p>Wind Speed: {{current_weather.current.wind_speed}} mph</p>
                 <p>Chance of Precipitation: {{current_weather.daily[0].pop}}%</p>
+                <a class="nav-link-active" href="/water_plants">Send Watering Update Text</a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4>Nearby Farmer's Markets</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{{markets.results[0].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[0].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                        <p>{{markets.results[1].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[1].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                        <p>{{markets.results[2].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[2].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
