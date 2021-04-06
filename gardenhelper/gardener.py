@@ -136,7 +136,7 @@ def update(plant_id):
             last_watering = str(datetime.now())
             watered = True
         else:
-            last_watering = plant.lastWatering
+            last_watering = plant[0].lastWatering
             watered = False
         plant = plant[0]
         plant = {'Id': plant_id, 'SpeciesId': plant.speciesId, 'CommonName': plant.commonName,
@@ -202,6 +202,7 @@ def search_name():
                                columns=columns)
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
         gardener.found_plant = True
+        gardener.first_search = True
         common_name = request.form['common_name']
         species_id = request.form['species_id']
         response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
@@ -209,8 +210,7 @@ def search_name():
         print(result)
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
         return render_template('gardener/plant_details.html', page_title=common_name, result=result, columns=columns)
-    elif request.method == 'POST' and not gardener.first_search and gardener.found_plant:
-        gardener.first_search = True
+    elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False
         common_name = request.form['common_name']
         image_url = request.form['image_url']
