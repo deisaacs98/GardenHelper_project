@@ -132,7 +132,7 @@ def update(plant_id):
         light = np.double(request.form['light'])
         soil_moisture = np.double(request.form['soil_moisture'])
         watered_today = request.form.get('watered_today')
-        if watered_today:
+        if watered_today == "True":
             last_watering = str(datetime.now())
             watered = True
         else:

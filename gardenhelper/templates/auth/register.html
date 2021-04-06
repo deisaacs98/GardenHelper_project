@@ -25,12 +25,17 @@
         </div>
     </nav>
 </header>
-<h1>{% block title %}Garden Helper Registration{% endblock %}</h1>
+<br>
+<br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-10">
+        <div class="col-md-3">
+        <img class="img-fluid" src="/static/images/waterfall.jpg" alt="Waterfall">
+    </div>
+    <div class="col-md-4">
         <div class="card border-success mb-3">
             <div class="card-body">
+              <h1>{% block title %}Garden Helper Registration{% endblock %}</h1>
               <form method="post">
                 <div class="row">
                   <label for="username" class="col-sm-2 col-form-label">Username</label>
@@ -113,5 +118,7 @@
               </form>
             </div>
         </div>
+    </div>
 
+</div>
 {% endblock %}

@@ -69,10 +69,10 @@ def register():
         if error is None:
             db.execute(
                 'INSERT INTO user (username, password, first_name, middle_initial, last_name, address_line1, '
-                'address_line2, city, state, zip_code, email, phone, reminder, lat, lng) VALUES (?, ?, ?, ?, ?, '
-                '?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                'address_line2, city, state, zip_code, email, phone, lat, lng) VALUES (?, ?, ?, ?, ?, '
+                '?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (username, generate_password_hash(password), first_name, middle_initial, last_name, address_line1,
-                 address_line2, city, state, zip_code, email, phone, reminder, lat, lng)
+                 address_line2, city, state, zip_code, email, phone, lat, lng)
             )
             db.commit()
             user = db.execute(
