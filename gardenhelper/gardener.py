@@ -149,7 +149,7 @@ def update(plant_id):
                  'GardenerId': plant.gardenerId}
         log = {'PlantId': plant_id, 'Date': str(datetime.now()), 'ImageUrl': image_url,
                'WateredToday': bool(watered), 'HealthStatus': health_status, 'Height': height, 'SoilPH': soil_ph,
-               'Light': light}
+               'Light': light, 'SoilMoisture': soil_moisture}
         response = requests.put('https://localhost:44325/api/plant/', json=plant, verify=False)
         post_response = requests.post('https://localhost:44325/api/plant/post-log', json=log, verify=False)
         #if plant['edible']:
