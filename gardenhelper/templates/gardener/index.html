@@ -1,5 +1,138 @@
 {% extends 'base.html' %}
+{% block content %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Garden Helper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active"  aria-current="page" href="/">My Plants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="search">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active"  aria-current="page" href="auth/logout">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
 
- {% block header %}{% endblock %}
 
-    {% block content %}{% endblock %}
+   {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+<br>
+<br>
+<div class="row">
+    <div class="col-md-1"></div>
+
+    <div class="col-md-7">
+        <div class="container-fluid">
+            <div class="card border-success mb-3">
+                <div class="card-body">
+                    <h3 class="card-title">Thank you for using Garden Helper</h3>
+                    <p class="card-text">If there is a plant you would like to add to your garden, you can search for
+                    it in our database! You can then view details about the plant and decide whether or not to add it
+                    to your garden.</p>
+                    <p>Once the plant is in your garden, you will receive text messages on days that you should water.
+                    After you water your plants, log in to confirm that you have watered the plant and to record any
+                    useful measurements that you might have taken!</p>
+                </div>
+                <img class="card-img-bottom" src="/static/images/pink_flowers.jpg" alt="Pink flowers">
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-success mb-3">
+            <div class="card-body">
+                <h3>Today's Weather</h3>
+                <p>Current Weather: {{current_weather.current.weather[0].main}}</p>
+                <p>Current Temperature: {{current_weather.current.temp}} &deg;F</p>
+                <p>Feels Like: {{current_weather.current.feels_like}} &deg;F</p>
+                <p>High: {{current_weather.daily[0].temp.max}} &deg;F</p>
+                <p>Low: {{current_weather.daily[0].temp.min}}&deg;F</p>
+                <p>Humidity: {{current_weather.current.humidity}}%</p>
+                <p>Wind Speed: {{current_weather.current.wind_speed}} mph</p>
+                <p>Chance of Precipitation: {{current_weather.daily[0].pop}}%</p>
+                <a class="nav-link-active" href="/water_plants">Send Watering Update Text</a>
+            </div>
+        </div>
+        <div class="card border-success mb-3">
+            <div class="card-body">
+                <h4>Nearby Farmer's Markets</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{{markets.results[0].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[0].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                        <p>{{markets.results[1].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[1].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                        <p>{{markets.results[2].marketname}}
+                            <a class="nav-link-active" href="{{nearby_markets[2].marketdetails.GoogleLink}}">
+                                View Map</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="card border-success mb-3">
+            <div class="card-body">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <h3>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h3>
+                            </th>
+                            <th>Common Name</th>
+                            <th>Date Planted</th>
+                            <th>Last Watering</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plant in garden%}
+                        <tr>
+                            <td class="col-md-2">
+                                <img src={{plant['imageUrl']}} class="img-thumbnail" alt="Plant Image">
+                            </td>
+                            {% for column in columns %}
+                            <td class="col-md-2">{{ plant[column] }}</td>
+                            {% endfor %}
+                            <td class="col-md-1">
+                                <a class="nav-link-active" href="{{plant['id']}}/update">Update</a>
+                            </td>
+                            <td class="col-md-1">
+                                <a class="nav-link-active" href="{{plant['id']}}/delete">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6dadaedc-2ffc-4e05-b28e-fd5093d1be39" name="Default Changelist" comment="" />
+    <list default="true" id="924e4d70-8bd8-4ea8-b680-ddfbce93ac50" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.vs/GardenHelperWebAPI/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/.vs/GardenHelperWebAPI/v16/.suo" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,7 +12,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="ProjectId" id="1qG83Vp5ETZRqL8deDQplnn3VPv" />
+  <component name="ProjectId" id="1qR9erqU92OzVzhbgf7vDVfxMl5" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -23,11 +25,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6dadaedc-2ffc-4e05-b28e-fd5093d1be39" name="Default Changelist" comment="" />
-      <created>1616694371299</created>
+      <changelist id="924e4d70-8bd8-4ea8-b680-ddfbce93ac50" name="Default Changelist" comment="" />
+      <created>1617031639518</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1616694371299</updated>
+      <updated>1617031639518</updated>
     </task>
     <servers />
   </component>

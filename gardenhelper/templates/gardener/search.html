@@ -7,17 +7,54 @@
  {% if error %}
     <p class=error><strong>Error:</strong> {{ error }}
   {% endif %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Garden Helper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">My Plants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="search">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="auth/logout">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
 <br>
 <br>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-3">
-        <div class="card">
+
+    <div class="col-md-4">
+        <img class="img-fluid" src="/static/images/poppies.jpg" alt="Poppies">
+    </div>
+    <div class="col-md-5">
+        <div class="card border-success mb-3">
             <div class="card-body">
+
+                <h2 class="card-title">{% block title %}Search for a plant in our database{% endblock %}</h2>
+                    <p class="card-text">If there is a plant you would like to add to your garden, you can search for
+                    it in our extensive database. Once you find the plant, select View Details to learn more about it
+                    and decide whether or not you would like to add it to your garden!</p>
                 <form method="post">
-                    <label for="common_name">Search For Plant By Common Name</label>
                     <input name="common_name" id="common_name" value="{{ request.form['common_name'] }}" required>
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Search">
                 </form>
             </div>
         </div>

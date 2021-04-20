@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+ {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Garden Helper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">My Plants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="search">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="auth/logout">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<br>
+<br>
+<div class="row border-success mb-3">
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <input name="plant" id="plant" type="hidden" value="{{plant[0]}}">
+                    <div class="row">
+                        <div class="col-sm-4">Did you water today?</div>
+                        <div class="col-sm-8">
+                            <input type="radio" id="Wet" name="watered_today" value={{True}}>
+                            <label for="Wet">Yes</label>
+                            <input type="radio" id="Dry" name="watered_today" value={{False}}>
+                            <label for="Dry">No</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="health_status" class="col-sm-4 col-form-label">Health Status</label>
+                        <div class="col-sm-8">
+                            <input name="health_status" id="health_status" value="{{ request.form['healthStatus'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="image_url" class="col-sm-4 col-form-label">Image URL</label>
+                        <div class="col-sm-8">
+                            <input name="image_url" id="image_url" value="{{ request.form['image_url'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="height" class="col-sm-4 col-form-label">Height in inches</label>
+                        <div class="col-sm-8">
+                            <input name="height" id="height" value="{{ request.form['datePlanted'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="soil_ph" class="col-sm-4 col-form-label">Soil pH</label>
+                        <div class="col-sm-8">
+                            <input name="soil_ph" id="soil_ph" value="{{ request.form['soilPH'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="light" class="col-sm-4 col-form-label">Light(on scale from 0-10)</label>
+                        <div class="col-sm-8">
+                            <input name="light" id="light" value="{{ request.form['light'] }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="soil_moisture" class="col-sm-4 col-form-label">
+                            Soil Moisture(on scale from 0-10)</label>
+                        <div class="col-sm-8">
+                            <input name="soil_moisture" id="soil_moisture" value="{{ request.form['soilMoisture'] }}">
+                        </div>
+                    </div>
+                    <input type="submit" value="Update">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card border-success mb-3">
+            <canvas id="myCanvas" width="200" height="200"></canvas>
+
+        </div>
+
+    </div>
+</div>
+<script>
+var ctx = document.getElementById("myCanvas").getContext('2d');
+var myCanvas=new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ log_dates | safe }},
+        datasets: [{
+            data: {{height_logs}},
+            label: "Height",
+            borderColor: "#2E0F15",
+            fill: false
+        }, {
+                        data: {{ph_logs}},
+                        label: "Soil pH",
+                        borderColor: "#70163C",
+                        fill: false
+        }, {
+                        data: {{light_logs}},
+                        label: "Light",
+                        borderColor: "#D5573B",
+                        fill: false
+        }, {
+                        data: {{moisture_logs}},
+                        label: "Soil Moisture",
+                        borderColor: "#545643",
+                        fill: false
+        }
+        ]
+    },
+    options: {
+    title: {
+      display: true,
+      text: 'Plant data by date'
+    },
+    hover: {
+     mode: 'index',
+     intersect: true
+    },
+  }
+    });
+</script>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="card border-success mb-3">
+            <div class="card-body">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <h3>{% block title %}{{plant[0].commonName}} Log{% endblock %}</h3>
+                            </th>
+                            <th>Date</th>
+                            <th>Watered</th>
+                            <th>Status</th>
+                            <th>Height</th>
+                            <th>Soil pH</th>
+                            <th>Light</th>
+                            <th>Soil Moisture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in plant_logs%}
+                        <tr>
+                            <td class="col-md-5">
+                                <img src={{log['imageUrl']}} class="img-thumbnail" alt="Plant Image">
+                            </td>
+                            {% for column in log_columns %}
+                            <td class="col-md-1">{{ log[column] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

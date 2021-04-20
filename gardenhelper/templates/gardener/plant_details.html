@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+ {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Garden Helper</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">My Plants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="search">Search</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="auth/logout">Sign Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<br>
+<br>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <div class="card border-success mb-3">
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <h2>{% block title %}{{result['common_name']}}{% endblock %}</h2>
+                            </th>
+                            <th>Common Name</th>
+                            <th>Scientific Name</th>
+                            <th>Family Common Name</th>
+                            <th>Family Scientific Name</th>
+                            <th>Edible</th>
+                            <th>Average Height</th>
+                            <th>pH</th>
+                            <th>Precipitation</th>
+                            <th>Temperature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-md-3">
+                                <img src={{result['image_url']}} class="img-thumbnail" alt="Plant Image"></img>
+                            </td>
+                            {% for column in columns %}
+                            <td class="col-md-1">{{ result[column] }}</td>
+                            {% endfor %}
+                            <td>{{result['edible']}}</td>
+                            <td>{{result.specifications['average_height']['cm']}} mm</td>
+                            <td>{{result.growth['ph_minimum']}} - {{result.growth['ph_maximum']}}</td>
+                            <td>{{result.growth['minimum_precipitation'][0]}} mm -
+                                {{result.growth['maximum_precipitation'][0]}} mm</td>
+                            <td>{{result.growth['minimum_temperature']['deg_f']}} &deg;F -
+                                {{result.growth['maximum_temperature']['deg_f']}} &deg;F</td>
+                            <td class="col-md-1">
+                                <form method="post">
+                                    <input name="common_name"  type="hidden"
+                                           id="common_name" value="{{ result['common_name']}}">
+                                    <input name="image_url" id="image_url" type="hidden"
+                                           value="{{ result['image_url']}}">
+                                    <input name="species_id" id="species_id" type="hidden" value="{{result['id']}}">
+                                    <input type="submit" value="Add to Garden">
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

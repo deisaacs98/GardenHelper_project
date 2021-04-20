@@ -1,24 +1,29 @@
 import json
 import requests
 from types import SimpleNamespace
+import pandas as pd
+from gardenhelper.auth import login_required
+from gardenhelper.auth import load_logged_in_user
 
-
+##Model is not necessary at this point, but leaving in case it is useful later.
 class Gardener:
-    def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1,_address_line2, _city,
+
+    def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1, _address_line2, _city,
                  _state, _zip, _phone, _lat, _lng):
-        self.id = _id
-        self.first_name = _first_name
-        self.middle_initial = _middle_initial
-        self.last_name = _last_name
-        self.email = _email
-        self.address_line1 = _address_line1
-        self.address_line2 = _address_line2
-        self.city = _city
-        self.state = _state
-        self.zip = _zip
-        self.phone = _phone
-        self.lat = _lat
-        self.lng = _lng
+        self.Id = _id
+        self.FirstName = _first_name
+        self.MiddleInitial = _middle_initial
+        self.LastName = _last_name
+        self.Email = _email
+        self.AddressLine1 = _address_line1
+        self.AddressLine2 = _address_line2
+        self.City = _city
+        self.State = _state
+        self.Zip = _zip
+        self.Phone = _phone
+        self.Lat = _lat
+        self.Lng = _lng
+
 
     @staticmethod
     def gardener_decoder(obj):
@@ -27,17 +32,8 @@ class Gardener:
                         obj['_zip'], obj['_phone'], obj['_lat'], obj['_lng'])
 
 
-##Not sure what I will be putting in here at the moment.
-##Leaving framework for reference.
-#response = requests.get('put REST API url here')
-
-#json_data_dict = json.loads(response)
-
-#gardeners = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
 
 
-###gardeners = gardener.gardener_decoder(json_data_dict)
-response = requests.get('https://trefle.io/api/v1/plants/search?token=')
 
-#json_data_dict = json.loads(response)
-plants = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d))
+first_search = True
+found_plant = False
