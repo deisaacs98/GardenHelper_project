@@ -199,8 +199,7 @@ def search_name():
         response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
         result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         print(result)
-        columns = ["common_name", "scientific_name", "family_common_name", "family"]
-        return render_template('gardener/plant_details.html', page_title=common_name, result=result, columns=columns)
+        return render_template('gardener/plant_details.html', page_title=common_name, result=result)
     elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False
         common_name = request.form['common_name']
