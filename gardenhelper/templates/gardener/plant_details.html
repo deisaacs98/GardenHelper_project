@@ -46,6 +46,43 @@
                 <div class="row">
                     <div class="col-md-3">
                         <img src={{result['image_url']}} class="img-thumbnail" alt="Plant Image"></img>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseImages" aria-expanded="false" aria-controls="collapseExample">
+                        View More Images
+                        </button>
+                        <div class="collapse" id="collapseImages">
+                            {% for image in result['images']['flower'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Flower Image">
+                                Flower. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                            {% for image in result['images']['leaf'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Leaf Image">
+                                Leaf. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                            {% for image in result['images']['habit'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Habit Image">
+                                Habit. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                            {% for image in result['images']['fruit'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Fruit Image">
+                                Fruit. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                            {% for image in result['images']['bark'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Bark Image">
+                                Bark. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                            {% for image in result['images']['other'] %}
+                            <img src={{image['image_url']}} class="img-thumbnail" alt="Other Image">
+                                Other. {{image.copyright}}
+                            </img>
+                            {% endfor %}
+                        </div>
+
                     </div>
                     <dl class="col-md-3">
                         <dt>Common Name</dt>
@@ -58,8 +95,20 @@
                         <dd>{{ result["family"] }}</dd>
                         <dt>Edible</dt>
                         <dd>{{result['edible']}}</dd>
+                        <dt>Ligneous Type</dt>
+                        <dd>{{result.specifications['ligneous_type']}}</dd>
+                        <dt>Growth Form</dt>
+                        <dd>{{result.specifications['growth_form']}}</dd>
+                        <dt>Growth Habit</dt>
+                        <dd>{{result.specifications['growth_habit']}}</dd>
+                        <dt>Growth Rate</dt>
+                        <dd>{{result.specifications['growth_rate']}}</dd>
                         <dt>Average Height</dt>
                         <dd>{{result.specifications['average_height']['cm']}} mm</dd>
+                        <dt>Nitrogen Fixation</dt>
+                        <dd>{{result.specifications['nitrogen_fixation']}}</dd>
+                        <dt>Toxicity</dt>
+                        <dd>{{result.specifications['toxicity']}}</dd>
                         <dt>ph Range</dt>
                         <dd>{{result.growth['ph_minimum']}} - {{result.growth['ph_maximum']}}</dd>
                         <dt>Precipitation Range</dt>
@@ -68,61 +117,92 @@
                         <dt>Temperature Range</dt>
                         <dd>{{result.growth['minimum_temperature']['deg_f']}} &deg;F -
                                     {{result.growth['maximum_temperature']['deg_f']}} &deg;F</dd>
+                        <dt>Days To Harvest</dt>
+                        <dd>{{result.growth['days_to_harvest']}}</dd>
+                        <dt>Growth Months</dt>
+                        <dd>{{result.growth['growth_months']}}</dd>
+                        <dt>Bloom Months</dt>
+                        <dd>{{result.growth['bloom_months']}}</dd>
+                        <dt>Fruit Months</dt>
+                        <dd>{{result.growth['fruit_months']}}</dd>
+                        <dt>Required Soil Nutriments: Scale from 0 (oligotrophic) to 10 (hypereutrophic)</dt>
+                        <dd>{{result.growth['soil_nutriments']}}</dd>
+                        <dt>Tolerance to Soil Salinity: Scale from 0 (untolerant) to 10 (hyperhaline)</dt>
+                        <dd>{{result.growth['soil_salinity']}}</dd>
+                        <dt>Required Soil Texture: Scale from 0 (clay) to 10 (rock)</dt>
+                        <dd>{{result.growth['soil_texture']}}</dd>
+                        <dt>Required Soil Humidity: Scale from 0 (xerophile) to 10 (subaquatic)</dt>
+                        <dd>{{result.growth['soil_humidity']}}</dd>
                         <dt></dt>
                         <dd></dd>
                     </dl>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <dl>
+
                             <dt>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseExample1" aria-expanded="false"
                                         aria-controls="collapseExample1">
-                                Native Regions
+                                View Regions Where Plant Is Native
                                 </button></dt>
                             <dd>
                                 <div class="collapse multi-collapse" id="collapseExample1">
-                                            <div class="card card-body">
-                                                <ul>
-                                                    {% for region in result.distribution['native'] %}
-                                                    <li>{{region}}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
+                                    <ul>
+                                        {% for region in result.distribution['native'] %}
+                                        <li>{{region}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
                             </dd>
                             <dt>
-                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                <button class="btn btn-warning" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapseExample2" aria-expanded="false"
                                         aria-controls="collapseExample2">
-                                Regions Where Plant Has Been Introduced
+                                View Regions Where Plant Has Been Introduced
                                 </button>
                             </dt>
                             <dd>
                                 <div class="collapse multi-collapse" id="collapseExample2">
-                                    <div class="card card-body">
-                                        <ul>
-                                            {% for region in result.distribution['introduced'] %}
-                                            <li>{{region}}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
+                                    <ul>
+                                        {% for region in result.distribution['introduced'] %}
+                                        <li>{{region}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </dd>
+                            <dt>
+                                <button class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseSources" aria-expanded="false"
+                                        aria-controls="collapseSources">
+                                Sources
+                                </button>
+                            </dt>
+                            <dd>
+                                <div class="collapse multi-collapse" id="collapseSources">
+                                    <ul>
+                                        {% for source in result.sources %}
+                                        <li>{{source['name']}}. Citation: {{source['citation']}}. URL: {{source['url']}}
+                                        Last Updated: {{source['last_update']}}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
                                 </div>
                             </dd>
                             <dt></dt>
-                            <dd></dd>
+                            <dd>
+                                <form method="post">
+                                    <input name="common_name"  type="hidden"
+                                           id="common_name" value="{{ result['common_name']}}">
+                                    <input name="image_url" id="image_url" type="hidden"
+                                           value="{{ result['image_url']}}">
+                                    <input name="species_id" id="species_id" type="hidden" value="{{result['id']}}">
+                                    <button type="submit" value="Add to Garden" class="btn btn-success">Add Plant To Garden
+                                    </button>
+                                </form>
+                            </dd>
                         </dl>
-                        <form method="post">
-                            <input name="common_name"  type="hidden"
-                                   id="common_name" value="{{ result['common_name']}}">
-                            <input name="image_url" id="image_url" type="hidden"
-                                   value="{{ result['image_url']}}">
-                            <input name="species_id" id="species_id" type="hidden" value="{{result['id']}}">
-                            <button type="submit" value="Add to Garden" class="btn btn-success">Add Plant To Garden
-                            </button>
-                        </form>
                     </div>
                 </div>
-
             </div>
         </div>
 
