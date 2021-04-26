@@ -1,10 +1,3 @@
-import json
-import requests
-from types import SimpleNamespace
-import pandas as pd
-from gardenhelper.auth import load_logged_in_user, login_required
-
-
 class Plant:
     def __init__(self, _id, _common_name, _date_planted,
                  _date_harvested, _last_watering, _health_status, _height, _soil_ph, _light,_soil_moisture,

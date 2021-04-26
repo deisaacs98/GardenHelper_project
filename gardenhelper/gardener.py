@@ -1,21 +1,12 @@
 import json
-import os
 from types import SimpleNamespace
 import requests
-from flask import Flask, jsonify, g, request, redirect, flash, render_template, url_for, Blueprint, make_response, \
-    session, app
-from werkzeug.utils import secure_filename
-
-import gardenhelper
+from flask import g, request, redirect, render_template, url_for, Blueprint, session
 from gardenhelper import auth
-from .auth import login_required, login
-from .auth import load_logged_in_user
-from .db import get_db
+from .auth import login_required
 from .api_keys import weather_key
 from .api_keys import trefle_token
 from .models import gardener
-from .models.gardener import Gardener
-from .models.plant import Plant
 import html
 import pandas as pd
 import numpy as np

@@ -1,8 +1,5 @@
 import functools
 import json
-import os
-from datetime import datetime, timedelta
-from types import SimpleNamespace
 
 import requests
 from flask import (
@@ -10,7 +7,6 @@ from flask import (
 )
 from twilio.rest import Client
 from werkzeug.security import check_password_hash, generate_password_hash
-from gardenhelper.api_keys import weather_key
 from gardenhelper.db import get_db
 from gardenhelper import api_keys
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -160,24 +156,3 @@ def send_text(user, text_message):
                         to="+1" + user['phone']
                     )
     print(message.sid)
-
-#def send_reminders():
-#    db = get_db()
-#    users = db.execute(
-#        'SELECT * FROM user'
-#    ).fetchall()
-#    for user in users:
-#        #send_alert = water_plants(user)
-#        send_alert=True
-#        if send_alert:
-#            account_sid = os.environ[api_keys.twilio_sid]
-#            auth_token = os.environ[api_keys.twilio_token]
-#            client = Client(account_sid, auth_token)
-#
-#            message = client.messages \
-#                .create(
-#                    body="Hello, this is Garden Helper with a friendly reminder to water your plants! ",
-#                    from_=api_keys.twilio_number,
-#                    to="+1" + user['phone']
-#                )
-#            print(message.sid)

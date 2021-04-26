@@ -1,8 +1,3 @@
-import json
-import requests
-from types import SimpleNamespace
-
-
 class Distribution:
     def __init__(self, _id, _native, _introduced, _doubtful, _absent, _extinct):
         self.id = _id

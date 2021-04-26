@@ -1,11 +1,3 @@
-import json
-import requests
-from types import SimpleNamespace
-import pandas as pd
-from gardenhelper.auth import login_required
-from gardenhelper.auth import load_logged_in_user
-
-##Model is not necessary at this point, but leaving in case it is useful later.
 class Gardener:
 
     def __init__(self, _id, _first_name, _middle_initial, _last_name, _email, _address_line1, _address_line2, _city,
