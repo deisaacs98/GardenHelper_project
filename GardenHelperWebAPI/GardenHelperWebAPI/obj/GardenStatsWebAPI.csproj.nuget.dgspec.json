@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenHelperWebAPI.csproj": {}
+    "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenStatsWebAPI.csproj": {}
   },
   "projects": {
-    "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenHelperWebAPI.csproj": {
+    "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenStatsWebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenHelperWebAPI.csproj",
-        "projectName": "GardenHelperWebAPI",
-        "projectPath": "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenHelperWebAPI.csproj",
+        "projectUniqueName": "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenStatsWebAPI.csproj",
+        "projectName": "GardenStatsWebAPI",
+        "projectPath": "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\GardenStatsWebAPI.csproj",
         "packagesPath": "C:\\Users\\Isaac\\.nuget\\packages\\",
         "outputPath": "D:\\Isaac\\DevCodeCamp\\gardenhelper\\GardenHelperWebAPI\\GardenHelperWebAPI\\obj\\",
         "projectStyle": "PackageReference",

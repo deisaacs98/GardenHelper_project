@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GardenHelperWebAPI.Data;
-using GardenHelperWebAPI.Models;
+using GardenStatsWebAPI.Data;
+using GardenStatsWebAPI.Models;
 
 
-namespace GardenHelperWebAPI.Controllers
+namespace GardenStatsWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

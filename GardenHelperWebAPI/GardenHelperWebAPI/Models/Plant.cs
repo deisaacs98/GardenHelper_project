@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GardenHelperWebAPI.Models
+namespace GardenStatsWebAPI.Models
 {
     public class Plant
     {
