@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2021-05-04T02:50:09.7258405Z"
+    },
+    "mssql1": {
+      "restored": true,
+      "restoreTime": "2021-05-04T02:39:42.9546113Z"
+    },
     "apis1": {
       "restored": true,
       "restoreTime": "2021-05-03T23:01:35.0284638Z"
@@ -11,8 +19,18 @@
       "Type": "resourceGroup",
       "Value": "GardenStats"
     },
+    "secrets1.resourceGroupName": {
+      "Name": "secrets1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "GardenStats"
+    },
     "apis1.subscriptionId": {
       "Name": "apis1.subscriptionId",
+      "Type": "subscription",
+      "Value": "90a23fc7-062a-4c70-a75f-6f062a70a272"
+    },
+    "secrets1.subscriptionId": {
+      "Name": "secrets1.subscriptionId",
       "Type": "subscription",
       "Value": "90a23fc7-062a-4c70-a75f-6f062a70a272"
     }

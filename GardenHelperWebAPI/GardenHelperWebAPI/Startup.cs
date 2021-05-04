@@ -34,7 +34,14 @@ namespace GardenStatsWebAPI
                 options.UseSqlServer(
                     Configuration.GetConnectionString("sqlConnection")));
 
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(config =>
+            {
+                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "GardenStatsAPI",
+                    Version = "v1"
+                });
+            });
 
         }
 
@@ -44,6 +51,16 @@ namespace GardenStatsWebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "GardenStatsAPI v1");
+                });
+            }
+            else
+            {
+                app.UseExceptionHandler();
             }
 
             app.UseHttpsRedirection();
@@ -59,7 +76,6 @@ namespace GardenStatsWebAPI
                 endpoints.MapControllers();
             });
 
-            app.UseSwagger();
         }
     }
 }

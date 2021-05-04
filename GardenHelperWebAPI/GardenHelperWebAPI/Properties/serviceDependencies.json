@@ -2,6 +2,14 @@
   "dependencies": {
     "apis1": {
       "type": "apis"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "sqlConnection"
+    },
+    "secrets1": {
+      "type": "secrets",
+      "connectionId": "VaultUri"
     }
   }
 }

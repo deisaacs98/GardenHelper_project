@@ -36,7 +36,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('gardenstatswebapi', subscription().subscriptionId)))]",
+      "name": "[concat(parameters('resourceGroupName'), 'Deployment', uniqueString(concat('GardenStatsWebAPI', subscription().subscriptionId)))]",
       "resourceGroup": "[parameters('resourceGroupName')]",
       "apiVersion": "2019-10-01",
       "dependsOn": [
@@ -66,7 +66,7 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "GardenStatsAPI/gardenstatswebapi",
+              "name": "GardenStatsAPI/GardenStatsWebAPI",
               "properties": {},
               "apiVersion": "2019-12-01",
               "dependsOn": [

@@ -10,8 +10,9 @@ using GardenStatsWebAPI.Models;
 
 namespace GardenStatsWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
+    [Route("[controller]")]
     public class PlantController : ControllerBase
     {
         private ApplicationDbContext _context;
