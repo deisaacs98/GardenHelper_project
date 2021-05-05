@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using GardenStatsWebAPI.Models;
+using GardenHelperWebAPI.Models;
 
-namespace GardenStatsWebAPI.Data
+namespace GardenHelperWebAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {

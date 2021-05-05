@@ -4,15 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GardenStatsWebAPI.Data;
-using GardenStatsWebAPI.Models;
+using GardenHelperWebAPI.Data;
+using GardenHelperWebAPI.Models;
 
 
-namespace GardenStatsWebAPI.Controllers
+namespace GardenHelperWebAPI.Controllers
 {
-    
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class PlantController : ControllerBase
     {
         private ApplicationDbContext _context;

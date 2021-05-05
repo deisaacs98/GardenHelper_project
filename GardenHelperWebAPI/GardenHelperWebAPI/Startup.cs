@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GardenStatsWebAPI.Data;
+using GardenHelperWebAPI.Data;
 
-namespace GardenStatsWebAPI
+namespace GardenHelperWebAPI
 {
    public class Startup
     {
@@ -33,16 +33,6 @@ namespace GardenStatsWebAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("sqlConnection")));
-
-            services.AddSwaggerGen(config =>
-            {
-                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-                {
-                    Title = "GardenStatsAPI",
-                    Version = "v1"
-                });
-            });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,16 +41,6 @@ namespace GardenStatsWebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                // Enable middleware to serve generated Swagger as a JSON endpoint.
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "GardenStatsAPI v1");
-                });
-            }
-            else
-            {
-                app.UseExceptionHandler();
             }
 
             app.UseHttpsRedirection();
@@ -75,7 +55,6 @@ namespace GardenStatsWebAPI
             {
                 endpoints.MapControllers();
             });
-
         }
     }
 }

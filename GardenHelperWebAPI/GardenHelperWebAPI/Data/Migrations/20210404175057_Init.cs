@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace GardenStatsWebAPI.Migrations
+namespace GardenHelperWebAPI.Migrations
 {
     public partial class Init : Migration
     {

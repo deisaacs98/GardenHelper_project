@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -12,22 +12,18 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "plant",
+      "launchUrl": "api/plant",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://gardenstatswebapivault.vault.azure.net/",
-        "AZURE_USERNAME": "deisaacs98@gmail.com"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "GardenHelperWebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "plant",
+      "launchUrl": "api/plant",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "VaultUri": "https://gardenstatswebapivault.vault.azure.net/",
-        "AZURE_USERNAME": "deisaacs98@gmail.com"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
