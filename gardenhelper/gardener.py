@@ -13,6 +13,7 @@ import numpy as np
 import sklearn as sklearn
 from datetime import datetime, timedelta, timezone, tzinfo, date
 from time import time
+from gardenhelper.db import get_db
 
 bp = Blueprint('gardener', __name__)
 
@@ -20,6 +21,7 @@ bp = Blueprint('gardener', __name__)
 @bp.route('/')
 @login_required
 def index():
+    db = get_db()
     user = g.user
     user_id = user['id']
     lat = user['lat']
