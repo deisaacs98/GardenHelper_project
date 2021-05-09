@@ -188,9 +188,10 @@ def search_name():
     if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
         gardener.first_search = False
         common_name = request.form['common_name']
-        response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
-        search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        #response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
+        #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
+        search_results = []
         return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
                                columns=columns)
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
@@ -198,9 +199,10 @@ def search_name():
         gardener.first_search = True
         common_name = request.form['common_name']
         species_id = request.form['species_id']
-        response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
-        result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
-        print(result)
+        #response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
+        #result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
+        #print(result)
+        result = []
         return render_template('gardener/plant_details.html', page_title=common_name, result=result)
     elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False
