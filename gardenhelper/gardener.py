@@ -17,6 +17,8 @@ from time import time
 from gardenhelper.db import get_db
 
 bp = Blueprint('gardener', __name__)
+df = pd.read_csv(r'gardenhelper/species.csv', sep='\t')
+print(df)
 
 
 @bp.route('/')
@@ -24,7 +26,7 @@ bp = Blueprint('gardener', __name__)
 def index():
     db = get_db()
     user = g.user
-    user_id = user['id']
+
     lat = user['lat']
     lng = user['lng']
     current_weather = get_current_weather(user=g.user)
@@ -33,9 +35,13 @@ def index():
     #three_days = get_historical_weather(user=g.user, days_ago=3)
     #four_days = get_historical_weather(user=g.user, days_ago=4)
     #weather_df = get_weather_df(current_weather, yesterdays_weather, two_days, three_days, four_days)
-    plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
-    plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus"]
+
+    #user = g.user
+    #user_id = user['id']
+    #plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
+    #plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    #columns = ["commonName", "datePlanted", "lastWatering", "healthStatus"]
+
     market_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat={lat}'
                                    f'&lng={lng}')
     markets = json.loads(market_response.content, object_hook=lambda d: SimpleNamespace(**d))
@@ -51,10 +57,24 @@ def index():
     market3 = json.loads(market3_response.content, object_hook=lambda d: SimpleNamespace(**d))
     nearby_markets = [market1, market2, market3]
     print(market1)
-    df = pd.read_csv(r'gardenhelper/species.csv', sep='\t')
-    print(df)
-    return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather,
+
+    return render_template('gardener/index.html', current_weather=current_weather,
                            nearby_markets=nearby_markets, markets=markets)
+
+
+@bp.route('/garden')
+@login_required
+def garden():
+    db = get_db()
+
+    user = g.user
+    user_id = user['id']
+    plants_response = requests.get(f'https://localhost:44325/api/plant/gardener={user_id}/index', verify=False)
+    plants = json.loads(plants_response.content, object_hook=lambda d: SimpleNamespace(**d))
+    columns = ["commonName", "datePlanted", "lastWatering", "healthStatus"]
+
+
+    return render_template('gardener/garden.html', garden=plants, columns=columns)
 
 
 @login_required

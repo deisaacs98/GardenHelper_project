@@ -1,12 +1,5 @@
 {% extends 'base.html' %}
-
-
-
-
 {% block content %}
- {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }}
-  {% endif %}
 <header>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
@@ -22,20 +15,24 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="garden">My Plants</a>
+                        <a class="nav-link active"  aria-current="page" href="garden">My Plants</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="search">Search</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="auth/logout">Sign Out</a>
+                        <a class="nav-link active"  aria-current="page" href="auth/logout">Sign Out</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-<h1>{% block title %}Search Results{% endblock %}</h1>
+
+
+   {% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+  {% endif %}
 <br>
 <br>
 <div class="row">
@@ -43,36 +40,35 @@
     <div class="col-md-10">
         <div class="card border-success mb-3">
             <div class="card-body">
+
                 <table>
                     <thead>
                         <tr>
-                            <th>Image</th>
+                            <th>
+                                <h3>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h3>
+                            </th>
                             <th>Common Name</th>
-                            <th>Scientific Name</th>
-                            <th>Family Common Name</th>
-                            <th>Family Scientific Name</th>
-                            <th></th>
+                            <th>Date Planted</th>
+                            <th>Last Watering</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for result in search_results%}
+                        {% for plant in garden%}
                         <tr>
-                            <td class="col-md-3">
-                                <img src={{result["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                            <td class="col-md-2">
+                                <img src={{plant['imageUrl']}} class="img-thumbnail" alt="Plant Image">
                             </td>
                             {% for column in columns %}
-                            <td class="col-md-2">{{ result[column] }}</td>
+                            <td class="col-md-2">{{ plant[column] }}</td>
                             {% endfor %}
                             <td class="col-md-1">
-                                <form method="post">
-                                    <input name="common_name" id="common_name" type="hidden"
-                                           value="{{ result['common_name']}}">
-                                    <input name="species_id" id="species_id" type="hidden"
-                                           value="{{ result['id']}}">
-                                    <input name="image_url" id="image_url" type="hidden"
-                                           value="{{ result['image_url']}}">
-                                    <input type="submit" value="View Details">
-                                </form>
+                                <a class="nav-link-active" href="{{plant['id']}}/update">Update</a>
+                            </td>
+                            <td class="col-md-1">
+                                <a class="nav-link-active" href="{{plant['id']}}/delete">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -82,5 +78,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

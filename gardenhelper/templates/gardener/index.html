@@ -15,7 +15,7 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active"  aria-current="page" href="/">My Plants</a>
+                        <a class="nav-link active"  aria-current="page" href="garden">My Plants</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="search">Search</a>
@@ -85,49 +85,6 @@
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-        <div class="card border-success mb-3">
-            <div class="card-body">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>
-                                <h3>{% block title %}{{g.user['first_name']}}'s Garden{% endblock %}</h3>
-                            </th>
-                            <th>Common Name</th>
-                            <th>Date Planted</th>
-                            <th>Last Watering</th>
-                            <th>Status</th>
-                            <th>Update</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for plant in garden%}
-                        <tr>
-                            <td class="col-md-2">
-                                <img src={{plant['imageUrl']}} class="img-thumbnail" alt="Plant Image">
-                            </td>
-                            {% for column in columns %}
-                            <td class="col-md-2">{{ plant[column] }}</td>
-                            {% endfor %}
-                            <td class="col-md-1">
-                                <a class="nav-link-active" href="{{plant['id']}}/update">Update</a>
-                            </td>
-                            <td class="col-md-1">
-                                <a class="nav-link-active" href="{{plant['id']}}/delete">Delete</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
