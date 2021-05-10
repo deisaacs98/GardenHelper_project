@@ -131,3 +131,5 @@ dmypy.json
 .idea/workspace.xml
 
 gardenhelper/api_keys.py
+gardenhelper/species.csv
+gardenhelper/checklist.csv

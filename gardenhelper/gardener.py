@@ -6,6 +6,7 @@ from gardenhelper import auth
 from .auth import login_required
 from .api_keys import weather_key
 from .api_keys import trefle_token
+
 from .models import gardener
 import html
 import pandas as pd
@@ -50,6 +51,8 @@ def index():
     market3 = json.loads(market3_response.content, object_hook=lambda d: SimpleNamespace(**d))
     nearby_markets = [market1, market2, market3]
     print(market1)
+    df = pd.read_csv(r'gardenhelper/species.csv', sep='\t')
+    print(df)
     return render_template('gardener/index.html', garden=plants, columns=columns, current_weather=current_weather,
                            nearby_markets=nearby_markets, markets=markets)
 
@@ -188,6 +191,7 @@ def search_name():
     if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
         gardener.first_search = False
         common_name = request.form['common_name']
+
         #response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
         #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
