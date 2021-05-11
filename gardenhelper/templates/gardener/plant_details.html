@@ -46,42 +46,13 @@
                 <h1>{{result['common_name']}}</h1>
                 <div class="row">
                     <div class="col-md-3">
-                        <img src={{result['image_url']}} class="img-thumbnail" alt="Plant Image"></img>
+                        <img src={{result.iloc[0]["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
                         <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapseImages" aria-expanded="false" aria-controls="collapseExample">
                         View More Images
                         </button>
                         <div class="collapse" id="collapseImages">
-                            {% for image in result['images']['flower'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Flower Image">
-                                Flower. {{image.copyright}}
-                            </img>
-                            {% endfor %}
-                            {% for image in result['images']['leaf'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Leaf Image">
-                                Leaf. {{image.copyright}}
-                            </img>
-                            {% endfor %}
-                            {% for image in result['images']['habit'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Habit Image">
-                                Habit. {{image.copyright}}
-                            </img>
-                            {% endfor %}
-                            {% for image in result['images']['fruit'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Fruit Image">
-                                Fruit. {{image.copyright}}
-                            </img>
-                            {% endfor %}
-                            {% for image in result['images']['bark'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Bark Image">
-                                Bark. {{image.copyright}}
-                            </img>
-                            {% endfor %}
-                            {% for image in result['images']['other'] %}
-                            <img src={{image['image_url']}} class="img-thumbnail" alt="Other Image">
-                                Other. {{image.copyright}}
-                            </img>
-                            {% endfor %}
+
                         </div>
 
                     </div>
@@ -89,13 +60,13 @@
 
 
                         <dt>Common Name</dt>
-                        <dd>{{ result["common_name"] }}</dd>
+                        <dd>{{ result.iloc[0]["common_name"].str }}</dd>
                         <dt>Scientific Name</dt>
-                        <dd>{{ result["scientific_name"] }}</dd>
+                        <dd>{{ result.iloc[0]["scientific_name"] }}</dd>
                         <dt>Family Name</dt>
-                        <dd>{{ result["family_common_name"] }}</dd>
+                        <dd>{{ result.iloc[0]["family_common_name"] }}</dd>
                         <dt>Family Scientific Name</dt>
-                        <dd>{{ result["family"] }}</dd>
+                        <dd>{{ result.iloc[0]["family"] }}</dd>
 
                     </dl>
                     <div class="col-md-6">
@@ -111,21 +82,21 @@
                                 <div class="collapse" id="collapseSpecifications">
                                     <dl>
                                         <dt>Edible</dt>
-                                        <dd>{{result['edible']}}</dd>
+                                        <dd>{{result.iloc[0]['edible']}}</dd>
                                         <dt>Ligneous Type</dt>
-                                        <dd>{{result.specifications['ligneous_type']}}</dd>
+                                        <dd>{{result.iloc[0]['ligneous_type']}}</dd>
                                         <dt>Growth Form</dt>
-                                        <dd>{{result.specifications['growth_form']}}</dd>
+                                        <dd>{{result.iloc[0]['growth_form']}}</dd>
                                         <dt>Growth Habit</dt>
-                                        <dd>{{result.specifications['growth_habit']}}</dd>
+                                        <dd>{{result.iloc[0]['growth_habit']}}</dd>
                                         <dt>Growth Rate</dt>
-                                        <dd>{{result.specifications['growth_rate']}}</dd>
+                                        <dd>{{result.iloc[0]['growth_rate']}}</dd>
                                         <dt>Average Height</dt>
-                                        <dd>{{result.specifications['average_height']['cm']}} mm</dd>
+                                        <dd>{{result.iloc[0]['average_height_cm']}} mm</dd>
                                         <dt>Nitrogen Fixation</dt>
-                                        <dd>{{result.specifications['nitrogen_fixation']}}</dd>
+                                        <dd>{{result.iloc[0]['nitrogen_fixation']}}</dd>
                                         <dt>Toxicity</dt>
-                                        <dd>{{result.specifications['toxicity']}}</dd>
+                                        <dd>{{result.iloc[0]['toxicity']}}</dd>
                                     </dl>
                                 </div>
                             </dd>
@@ -140,31 +111,25 @@
                                 <div class="collapse" id="collapseGrowth">
                                     <dl>
                                         <dt>ph Range</dt>
-                                        <dd>{{result.growth['ph_minimum']}} - {{result.growth['ph_maximum']}}</dd>
-                                        <dt>Precipitation Range</dt>
-                                        <dd>{{result.growth['minimum_precipitation'][0]}} mm -
-                                            {{result.growth['maximum_precipitation'][0]}} mm</dd>
-                                        <dt>Temperature Range</dt>
-                                        <dd>{{result.growth['minimum_temperature']['deg_f']}} &deg;F -
-                                            {{result.growth['maximum_temperature']['deg_f']}} &deg;F</dd>
+                                        <dd>{{result.iloc[0]['ph_minimum']}} - {{result.iloc[0]['ph_maximum']}}</dd>
                                         <dt>Days To Harvest</dt>
-                                        <dd>{{result.growth['days_to_harvest']}}</dd>
+                                        <dd>{{result.iloc[0]['days_to_harvest']}}</dd>
                                         <dt>Growth Months</dt>
-                                        <dd>{{result.growth['growth_months']}}</dd>
+                                        <dd>{{result.iloc[0]['growth_months']}}</dd>
                                         <dt>Bloom Months</dt>
-                                        <dd>{{result.growth['bloom_months']}}</dd>
+                                        <dd>{{result.iloc[0]['bloom_months']}}</dd>
                                         <dt>Fruit Months</dt>
-                                        <dd>{{result.growth['fruit_months']}}</dd>
+                                        <dd>{{result.iloc[0]['fruit_months']}}</dd>
                                         <dt>Required Soil Nutriments: Scale from 0 (oligotrophic) to 10 (hypereutrophic)
                                         </dt>
-                                        <dd>{{result.growth['soil_nutriments']}}</dd>
+                                        <dd>{{result.iloc[0]['soil_nutriments']}}</dd>
                                         <dt>Tolerance to Soil Salinity: Scale from 0 (untolerant) to 10 (hyperhaline)
                                         </dt>
-                                        <dd>{{result.growth['soil_salinity']}}</dd>
+                                        <dd>{{result.iloc[0]['soil_salinity']}}</dd>
                                         <dt>Required Soil Texture: Scale from 0 (clay) to 10 (rock)</dt>
-                                        <dd>{{result.growth['soil_texture']}}</dd>
+                                        <dd>{{result.iloc[0]['soil_texture']}}</dd>
                                         <dt>Required Soil Humidity: Scale from 0 (xerophile) to 10 (subaquatic)</dt>
-                                        <dd>{{result.growth['soil_humidity']}}</dd>
+                                        <dd>{{result.iloc[0]['soil_humidity']}}</dd>
                                     </dl>
                                 </div>
                             </dd>
@@ -177,7 +142,7 @@
                             <dd>
                                 <div class="collapse multi-collapse" id="collapseExample1">
                                     <ul>
-                                        {% for region in result.distribution['native'] %}
+                                        {% for region in result['native'] %}
                                         <li>{{region}}</li>
                                         {% endfor %}
                                     </ul>
@@ -193,7 +158,7 @@
                             <dd>
                                 <div class="collapse multi-collapse" id="collapseExample2">
                                     <ul>
-                                        {% for region in result.distribution['introduced'] %}
+                                        {% for region in result['introduced'] %}
                                         <li>{{region}}</li>
                                         {% endfor %}
                                     </ul>

@@ -55,22 +55,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for result in search_results%}
+                        {% for result in match%}
                         <tr>
                             <td class="col-md-3">
-                                <img src={{result["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
+                                <img src={{search_df[search_df["common_name"].str.lower()==result].iloc[0]["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
                             </td>
                             {% for column in columns %}
-                            <td class="col-md-2">{{ result[column] }}</td>
+                            <td class="col-md-2">{{ search_df[search_df["common_name"].str.lower()==result].iloc[0][column] }}</td>
                             {% endfor %}
                             <td class="col-md-1">
                                 <form method="post">
                                     <input name="common_name" id="common_name" type="hidden"
-                                           value="{{ result['common_name']}}">
-                                    <input name="species_id" id="species_id" type="hidden"
-                                           value="{{ result['id']}}">
-                                    <input name="image_url" id="image_url" type="hidden"
-                                           value="{{ result['image_url']}}">
+                                           value="{{search_df[search_df['common_name'].str.lower()==result].iloc[0]['image_url']}}">
                                     <input type="submit" value="View Details">
                                 </form>
                             </td>

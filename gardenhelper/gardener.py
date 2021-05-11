@@ -214,37 +214,48 @@ def search_name():
         common_name=common_name.lower()
 
         #Need to use species.csv here
-        names_list = df['common_name']
-        names_list = names_list.str.lower()
+        names_df = df['common_name']
+        names_list = names_df.str.lower()
         names = names_list.to_numpy()
+        match = []
         for name in names:
-            if common_name in str(name):
-                print(name)
-        print(common_name)
+            if common_name in str(name) and name not in match:
+                match.append(name)
+        search_df = df[(df['common_name'].str.lower()).isin(match)]
+        print(match)
+        search_results = search_df.to_numpy()
+
+
+        #print(search_results['image_url'])
+        #print(search_results['common_name'])
+        #print(search_df)
+        #print(common_name)
 
 
 
         #response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
         #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         columns = ["common_name", "scientific_name", "family_common_name", "family"]
-        search_results = []
-        return render_template('gardener/search_results.html', common_name=common_name, search_results=search_results,
-                               columns=columns)
+
+        #print(search_results[0])
+        return render_template('gardener/search_results.html', common_name=common_name, match=match,
+                               search_results=search_results, columns=columns, search_df=search_df)
     elif request.method == 'POST' and not gardener.first_search and not gardener.found_plant:
         gardener.found_plant = True
         gardener.first_search = True
         common_name = request.form['common_name']
-        species_id = request.form['species_id']
+        #species_id = request.form['species_id']
         #response = requests.get(f'https://trefle.io/api/v1/species/{species_id}?token={trefle_token}')
         #result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         #print(result)
-        result = []
+        result = df[df['common_name'] == common_name]
         return render_template('gardener/plant_details.html', page_title=common_name, result=result)
     elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False
         common_name = request.form['common_name']
-        image_url = request.form['image_url']
-        species_id = np.double(request.form['species_id'])
+        image_url = df[df['common_name'] == common_name]['image_url']
+        print(image_url)
+        species_id = df[df['common_name'] == common_name]['id']
         user_id = session.get('user_id')
         plant = {'CommonName': common_name, 'SpeciesId': species_id, 'DatePlanted': str(datetime.now()),
                  'ImageUrl': image_url, 'GardenerId': user_id}
