@@ -18,8 +18,9 @@ from gardenhelper.db import get_db
 
 bp = Blueprint('gardener', __name__)
 df = pd.read_csv(r'gardenhelper/species.csv', sep='\t')
-print(df)
-
+spinach = df[df["common_name"] == 'Spinach']
+print(df.iloc[500])
+print(spinach.iloc[0]["family"])
 
 @bp.route('/')
 @login_required
@@ -30,6 +31,7 @@ def index():
     lat = user['lat']
     lng = user['lng']
     current_weather = get_current_weather(user=g.user)
+
     #yesterdays_weather = get_historical_weather(user=g.user, days_ago=1)
     #two_days = get_historical_weather(user=g.user, days_ago=2)
     #three_days = get_historical_weather(user=g.user, days_ago=3)
@@ -45,7 +47,6 @@ def index():
     market_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/locSearch?lat={lat}'
                                    f'&lng={lng}')
     markets = json.loads(market_response.content, object_hook=lambda d: SimpleNamespace(**d))
-    print(markets)
     market1_id = markets.results[0].id
     market2_id = markets.results[1].id
     market3_id = markets.results[2].id
@@ -56,7 +57,6 @@ def index():
     market3_response = requests.get(f'http://search.ams.usda.gov/farmersmarkets/v1/data.svc/mktDetail?id={market3_id}')
     market3 = json.loads(market3_response.content, object_hook=lambda d: SimpleNamespace(**d))
     nearby_markets = [market1, market2, market3]
-    print(market1)
 
     return render_template('gardener/index.html', current_weather=current_weather,
                            nearby_markets=nearby_markets, markets=markets)
@@ -211,6 +211,18 @@ def search_name():
     if request.method == 'POST' and gardener.first_search and not gardener.found_plant:
         gardener.first_search = False
         common_name = request.form['common_name']
+        common_name=common_name.lower()
+
+        #Need to use species.csv here
+        names_list = df['common_name']
+        names_list = names_list.str.lower()
+        names = names_list.to_numpy()
+        for name in names:
+            if common_name in str(name):
+                print(name)
+        print(common_name)
+
+
 
         #response = requests.get(f'https://trefle.io/api/v1/plants/search?token={trefle_token}&q={common_name}')
         #search_results = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
