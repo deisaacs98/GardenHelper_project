@@ -249,6 +249,11 @@ def search_name():
         #result = json.loads(response.content, object_hook=lambda d: SimpleNamespace(**d)).data
         #print(result)
         result = df[df['common_name'] == common_name]
+        image_url = result.iloc[0]['image_url']
+        print(result)
+
+        print(image_url)
+
         return render_template('gardener/plant_details.html', page_title=common_name, result=result)
     elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False

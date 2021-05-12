@@ -43,7 +43,7 @@
     <div class="col-md-10">
         <div class="card border-success mb-3">
             <div class="card-body">
-                <h1>{{result['common_name']}}</h1>
+                <h1>{{result.iloc[0]['common_name']}}</h1>
                 <div class="row">
                     <div class="col-md-3">
                         <img src={{result.iloc[0]["image_url"]}} class="img-thumbnail" alt="Plant Image"></img>
@@ -54,13 +54,10 @@
                         <div class="collapse" id="collapseImages">
 
                         </div>
-
                     </div>
                     <dl class="col-md-3">
-
-
                         <dt>Common Name</dt>
-                        <dd>{{ result.iloc[0]["common_name"].str }}</dd>
+                        <dd>{{ result.iloc[0]["common_name"] }}</dd>
                         <dt>Scientific Name</dt>
                         <dd>{{ result.iloc[0]["scientific_name"] }}</dd>
                         <dt>Family Name</dt>
