@@ -183,10 +183,10 @@
                             <dd>
                                 <form method="post">
                                     <input name="common_name"  type="hidden"
-                                           id="common_name" value="{{ result['common_name']}}">
+                                           id="common_name" value="{{ result.iloc[0]['common_name']}}">
                                     <input name="image_url" id="image_url" type="hidden"
-                                           value="{{ result['image_url']}}">
-                                    <input name="species_id" id="species_id" type="hidden" value="{{result['id']}}">
+                                           value="{{ result.iloc[0]['image_url']}}">
+                                    <input name="species_id" id="species_id" type="hidden" value="{{result.iloc[0]['id']}}">
                                     <button type="submit" value="Add to Garden" class="btn btn-success">Add Plant To Garden
                                     </button>
                                 </form>

@@ -1,6 +1,7 @@
 import json
 from types import SimpleNamespace
 import requests
+import plantcv
 from flask import g, request, redirect, render_template, url_for, Blueprint, session
 from gardenhelper import auth
 from .auth import login_required
@@ -18,9 +19,11 @@ from gardenhelper.db import get_db
 
 bp = Blueprint('gardener', __name__)
 df = pd.read_csv(r'gardenhelper/species.csv', sep='\t')
-spinach = df[df["common_name"] == 'Spinach']
-print(df.iloc[500])
-print(spinach.iloc[0]["family"])
+
+
+#spinach = df[df["common_name"] == 'Spinach']
+#print(df.iloc[500])
+#print(spinach.iloc[0]["family"])
 
 @bp.route('/')
 @login_required
@@ -219,7 +222,7 @@ def search_name():
         names = names_list.to_numpy()
         match = []
         for name in names:
-            if common_name in str(name) and name not in match:
+            if common_name in str(name):
                 match.append(name)
         search_df = df[(df['common_name'].str.lower()).isin(match)]
         print(match)
@@ -258,13 +261,14 @@ def search_name():
     elif request.method == 'POST' and gardener.first_search and gardener.found_plant:
         gardener.found_plant = False
         common_name = request.form['common_name']
-        image_url = df[df['common_name'] == common_name]['image_url']
+        image_url = request.form['image_url']
         print(image_url)
-        species_id = df[df['common_name'] == common_name]['id']
+        species_id = int(request.form['species_id'])
         user_id = session.get('user_id')
         plant = {'CommonName': common_name, 'SpeciesId': species_id, 'DatePlanted': str(datetime.now()),
                  'ImageUrl': image_url, 'GardenerId': user_id}
         response = requests.post('https://localhost:44325/api/plant/post-plant', json=plant, verify=False)
+        print(response)
 
         #response = requests.get(f'https://trefle.io/api/v1/plants?token={trefle_token}&filter[common_name]='
                                 #f'{common_name}')
